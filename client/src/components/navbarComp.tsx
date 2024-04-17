@@ -19,7 +19,7 @@ export function Navbar() {
     return (
         <>
             <NavigationMenu>
-                <NavigationMenuList className="space-between">
+                <NavigationMenuList >
                     <NavigationMenuItem>
                         <NavigationMenuTrigger>Menu</NavigationMenuTrigger>
                         <NavigationMenuContent>
@@ -27,20 +27,20 @@ export function Navbar() {
                                 <li className="row-span-3">
                                     <NavigationMenuLink asChild>
                                         <a
-                                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-white-200 hover:bg-gray-200 no-underline outline-none p-4"
                                             href="/"
                                         >
                                             <Icons.logo className="h-6 w-6" />
                                             <div className="mb-2 mt-4 text-lg font-medium">
-                                                our webshop
+                                                home
                                             </div>
                                             <p className="text-sm leading-tight text-muted-foreground">
-                                                Beautifully designed T-Shirts with environment and sustainability in mind.
+                                                See our beautifully designed T-Shirts with environment and sustainability in mind. Good prices and scandinavian design.
                                             </p>
                                         </a>
                                     </NavigationMenuLink>
                                 </li>
-                                <ListItem href="/admin" title="Admin">
+                                <ListItem className="p-4 transition-colors" href="/admin" title="Admin">
                                     Login to view, edit & add products, (admin only)
                                 </ListItem>
                                 <ListItem href="/" title="Admin">
@@ -86,7 +86,7 @@ const ListItem = React.forwardRef<
     React.ComponentPropsWithoutRef<"a"> & { showRemoveButton?: boolean }
 >(({ className, title, children, showRemoveButton, ...props }, ref) => {
     return (
-        <li className="flex justify-between items-center hover:bg-accent hover:text-accent-foreground">
+        <li className="flex justify-between items-center bg-white-200 hover:bg-gray-200 rounded-lg p-2 hover:text-accent-foreground">
             <NavigationMenuLink asChild>
                 <a
                     ref={ref}
