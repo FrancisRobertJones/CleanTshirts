@@ -14,15 +14,16 @@ class ProductService {
         return products
     }
 
-    async createProduct(productData){
+    async createProduct(productData) {
         const newProduct = await this.productRepository.create(productData)
         return newProduct
     }
 
-    editProduct(){
-        this.productRepository.edit(productId, productData)
+    async editProduct(productId, productData) {
+        const updatedProduct = await this.productRepository.edit(productId, productData)
+        return updatedProduct
     }
-    deleteProduct(){
+    deleteProduct() {
         this.productRepository.delete(productId)
     }
 }

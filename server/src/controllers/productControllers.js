@@ -25,15 +25,25 @@ class ProductController {
             console.log("this is the newly created product", newProduct)
             res.status(200).json({ "new product": newProduct })
         } catch (error) {
-            res.status(500).json({"error": error })
+            res.status(500).json({ "error": error })
         }
     }
 
     editProduct = async (req, res) => {
         const productId = req.params.id
         const productData = req.body
-        this.productService.editProduct(productId, productData)
-        //TODO fix rest of this
+        try {
+            const updatedProduct = await this.productService.editProduct(productId, productData)
+            if (updatedProduct.acknowledged && updatedProduct.modifiedCount > 0) {
+                res.status(200).json({ message: "Product updated successfully" });
+            } else if (updatedProduct.matchedCount === 0) {
+                res.status(404).json({ message: "No product found with provided ID" });
+            } else {
+                res.status(200).json({ message: "No changes made to the product" });
+            }
+        } catch (error) {
+            res.status(500).json({ "error": error })
+        }
     }
 
 

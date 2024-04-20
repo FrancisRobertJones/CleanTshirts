@@ -1,4 +1,5 @@
 const DatabaseConnection = require("../dataBase/DatabaseConnection")
+const mongodb = require("mongodb")
 
 //note to self, repositories strictly interact with database. return to servicelayer, which then passes back to controller, which then formats as needed and sends response back to client. 
 
@@ -26,22 +27,53 @@ class ProductRepository {
         return returnArray
     }
 
-    async create() {
+    async create(productData) {
         try {
             await this.connect()
             const collection = this.db.collection('products')
 
-            const newProduct = await collection.insertOne({ "status": "active", "name": "new product", "price": 500, "image": null, "amountInStock": 5 })
-            return newProduct}
+            const newProduct = await collection.insertOne({ 
+                "status": productData["status"], 
+                "name": productData["name"], 
+                "price": productData["price"], 
+                "image": productData["image"],
+                "amountInStock": productData["amountInStock"],
+                "description": product["description"] 
+            })
+            return newProduct
+        }
         catch (error) {
-                console.error('Failed to create product:', error);
-                throw new Error('Failed to create product');
-            }
-        } 
+            console.error('Failed to create product:', error);
+            throw new Error('Failed to create product');
+        }
+    }
 
+    async edit(id, productData) {
+        try {
+            await this.connect()
+            const collection = this.db.collection('products')
 
-
+            const updatedProduct = await collection.updateOne({ "_id": new mongodb.ObjectId({ id }) }, {
+                "$set": {
+                    "name": productData["name"],
+                    "description": productData["description"],
+                    "amountInStock": productData["amountInStock"],
+                    "status": productData["status"],
+                    "price": productData["price"],
+                    "image": productData["image"]
+                }
+            })
+            return updatedProduct
+        }
+        catch (error) {
+            console.error('Failed to create product:', error);
+            throw new Error('Failed to create product');
+        }
+    }
 }
+
+
+
 
 
 

@@ -3,6 +3,7 @@ const express = require('express')
 const DatabaseConnection = require('./dataBase/DatabaseConnection')
 const bodyParser = require('body-parser')
 const productsRouter = require('./routes/productRoutes')
+const cors = require('cors')
 
 let app = express()
 
@@ -13,6 +14,7 @@ const PORT = 3000
 connectMongodb.setUrl("mongodb://localhost:27017")
 
 app.use(express.json())
+app.use(cors())
 
 
 app.use("/products", productsRouter)

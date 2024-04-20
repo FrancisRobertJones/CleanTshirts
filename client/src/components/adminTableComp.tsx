@@ -10,7 +10,12 @@ import {
 import { EditProduct } from "./editProductComp"
 import AddProductComp from "./addProductComp"
 
-const TableComponent = () => {
+
+interface IAdminTableComponentProps {
+
+}
+
+const adminTableComponent = ( ) => {
     return (
         <>
             <div className="flex flex-col items-left">
@@ -36,7 +41,7 @@ const TableComponent = () => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right"><EditProduct /></TableCell>
+                        <TableCell className="text-right">< /></TableCell>
                     </TableRow>
 
                     <TableRow>
@@ -44,7 +49,7 @@ const TableComponent = () => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right"><EditProduct /></TableCell>
+                        <TableCell className="text-right">< /></TableCell>
 
                     </TableRow>
                     <TableRow>
@@ -52,7 +57,7 @@ const TableComponent = () => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right"><EditProduct /></TableCell>
+                        <TableCell className="text-right">< /></TableCell>
 
                     </TableRow>
                     <TableRow>
@@ -60,7 +65,7 @@ const TableComponent = () => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right"><EditProduct /></TableCell>
+                        <TableCell className="text-right">< /></TableCell>
 
                     </TableRow>
                     <TableRow>
@@ -68,7 +73,7 @@ const TableComponent = () => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right"><EditProduct /></TableCell>
+                        <TableCell className="text-right">< /></TableCell>
 
                     </TableRow>
 
@@ -79,4 +84,4 @@ const TableComponent = () => {
     )
 }
 
-export default TableComponent
+export default adminTableComponent
