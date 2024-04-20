@@ -16,15 +16,30 @@ class ProductRepository {
     async findAll() {
         await this.connect();
         const collection = this.db.collection('products')
-        let pipeline= [];
+        let pipeline = [];
         let documents = collection.aggregate(pipeline);
         let returnArray = [];
-        for await(const document of documents) {
+        for await (const document of documents) {
             returnArray.push(document)
         }
         console.log(returnArray)
         return returnArray
     }
+
+    async create() {
+        try {
+            await this.connect()
+            const collection = this.db.collection('products')
+
+            const newProduct = await collection.insertOne({ "status": "active", "name": "new product", "price": 500, "image": null, "amountInStock": 5 })
+            return newProduct}
+        catch (error) {
+                console.error('Failed to create product:', error);
+                throw new Error('Failed to create product');
+            }
+        } 
+
+
 
 }
 

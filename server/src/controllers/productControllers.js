@@ -11,24 +11,33 @@ class ProductController {
         try {
             const products = await this.productService.getProducts();
             console.log("here are the products in controllers", products)
-            res.status(200).json({products});
+            res.status(200).json({ products });
         } catch (error) {
             res.status(500).send(error.message);
         }
     }
 
-    getProduct = async (req, res) => {
-        productId = req.params.id
-        this.productService.getProduct(productId)
-    }
     createProduct = async (req, res) => {
-        productData = req.body
-        this.productService.createProduct(productData)
+        const productData = req.body
+        try {
+            const newProduct = await this.productService.createProduct(productData);
+            //TODO deal with newProductID
+            console.log("this is the newly created product", newProduct)
+            res.status(200).json({ "new product": newProduct })
+        } catch (error) {
+            res.status(500).json({"error": error })
+        }
     }
+
     editProduct = async (req, res) => {
-        productData = req.body
+        const productId = req.params.id
+        const productData = req.body
         this.productService.editProduct(productId, productData)
+        //TODO fix rest of this
     }
+
+
+
     deleteProduct = async (req, res) => {
         productId = req.params.id
         this.productService.deleteProduct(productId)

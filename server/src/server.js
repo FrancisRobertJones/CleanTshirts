@@ -8,6 +8,7 @@ let app = express()
 
 
 const connectMongodb = DatabaseConnection.getInstance()
+
 const PORT = 3000
 connectMongodb.setUrl("mongodb://localhost:27017")
 

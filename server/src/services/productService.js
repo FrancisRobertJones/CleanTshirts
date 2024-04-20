@@ -13,12 +13,12 @@ class ProductService {
         const products = await this.productRepository.findAll()
         return products
     }
-    getProduct(){
-        this.productRepository.findById(productId)
+
+    async createProduct(productData){
+        const newProduct = await this.productRepository.create(productData)
+        return newProduct
     }
-    createProduct(){
-        this.productRepository.create(productData)
-    }
+
     editProduct(){
         this.productRepository.edit(productId, productData)
     }
