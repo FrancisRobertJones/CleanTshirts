@@ -12,10 +12,25 @@ import {
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { Button } from "./ui/button"
+import { CartContext } from "@/context/cartContext"
+import { CartActionType } from "./reducers/cartReducer"
+import { IProduct } from "@/models/interfaces/products"
+import { toast } from "./ui/use-toast"
 
 
 export function Navbar() {
-    const [cartCount, setCartCount] = React.useState(1)
+
+    const { cartItems, dispatchCart } = React.useContext(CartContext)
+
+    const removeFromCart = (product: IProduct) => {
+        dispatchCart({ type: CartActionType.REMOVEFROMCART, payload: product })
+        toast({
+            title: "Product removed from cart",
+            description: ` ${product.name} removed from cart`,
+          })
+
+    }
+
     return (
         <>
             <NavigationMenu>
@@ -53,7 +68,7 @@ export function Navbar() {
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <NavigationMenuTrigger><img src="../../public/cart.svg" className="h-4" alt="" /><span className="relative text-xs mb-2 ml-1">{cartCount}</span></NavigationMenuTrigger>
+                        <NavigationMenuTrigger><img src="../../public/cart.svg" className="h-4" alt="" /><span className="relative text-xs mb-2 ml-1">{ }</span></NavigationMenuTrigger>
                         <NavigationMenuContent>
                             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                                 <li className="row-span-3">
@@ -61,15 +76,12 @@ export function Navbar() {
                                         <h1>Cart</h1>
                                     </NavigationMenuLink>
                                 </li>
-                                <ListItem href="/" title="Cart" showRemoveButton={true}>
-                                    T shirt white
-                                </ListItem>
-                                <ListItem href="/" title="Cart" showRemoveButton={true}>
-                                    T shirt black
-                                </ListItem>
-                                <ListItem href="/" title="Cart" showRemoveButton={true}>
-                                    T shirt purple
-                                </ListItem>
+                                {cartItems.map((cartItem) => {
+                                    return (<ListItem key={cartItem.product._id} title={cartItem.product.name} showRemoveButton={true} product={cartItem.product} removeFromCart={removeFromCart}>
+                                        {cartItem.product.name} <span className="font-bold">Quantity:</span> {cartItem.quantity}
+                                    </ListItem>)
+                                })}
+
                                 <Button className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Checkout</Button>
                             </ul>
                         </NavigationMenuContent>
@@ -83,8 +95,10 @@ export function Navbar() {
 
 const ListItem = React.forwardRef<
     React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a"> & { showRemoveButton?: boolean }
->(({ className, title, children, showRemoveButton, ...props }, ref) => {
+    React.ComponentPropsWithoutRef<"a"> & { showRemoveButton?: boolean, product?: IProduct, removeFromCart? : (product: IProduct) => void }
+>(({ className, title, children, showRemoveButton, removeFromCart, product, ...props }, ref) => {
+
+
     return (
         <li className="flex justify-between items-center bg-white-200 hover:bg-gray-200 rounded-lg p-2 hover:text-accent-foreground">
             <NavigationMenuLink asChild>
@@ -101,8 +115,8 @@ const ListItem = React.forwardRef<
                     </p>
                 </a>
             </NavigationMenuLink>
-            {showRemoveButton && (
-                <button className="text-xs h-6 bg-white text-black border border-black px-3 py-1 hover:bg-black hover:text-white">
+            {showRemoveButton && product && removeFromCart && (
+                <button onClick={() => removeFromCart(product)} className="text-xs h-6 bg-white text-black border border-black px-3 py-1 hover:bg-black hover:text-white">
                     Remove
                 </button>
             )}

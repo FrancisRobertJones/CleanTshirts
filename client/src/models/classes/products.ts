@@ -1,3 +1,5 @@
+import { IProduct } from "../interfaces/products";
+
 export class NewProductDetails {
     constructor(
         public name: string,
@@ -9,4 +11,11 @@ export class NewProductDetails {
         public amountInStock: number,
         public category: string
     ) { }
+}
+
+export class CartProduct {
+    constructor(
+    public quantity: number,
+    public product: IProduct
+    ){}
 }

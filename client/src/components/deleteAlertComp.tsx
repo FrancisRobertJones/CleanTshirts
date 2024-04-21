@@ -20,7 +20,7 @@ export function DeleteAlertComp({ handleDeleteSubmit }: IDeleteAlertCompProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
+        <Button variant="destructive">Delete product</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -32,7 +32,7 @@ export function DeleteAlertComp({ handleDeleteSubmit }: IDeleteAlertCompProps) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={handleDeleteSubmit}>Delete product</AlertDialogAction>
+          <AlertDialogAction onClick={handleDeleteSubmit}>Delete product</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
