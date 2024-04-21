@@ -18,6 +18,7 @@ import { useEffect, useState } from "react"
 import { NewProductDetails } from "@/models/classes/products"
 import { Switch } from "@/components/ui/switch"
 import { CategorySelectComp } from "./categorySelectComp"
+import { DeleteAlertComp } from "./deleteAlertComp"
 
 
 interface IEditProductProps {
@@ -26,7 +27,7 @@ interface IEditProductProps {
 }
 
 export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
-  const [newProduct, setNewProduct] = useState(new NewProductDetails(product.name, product.price, product.description, product.image, true, product.amountInStock, product.category))
+  const [newProduct, setNewProduct] = useState(new NewProductDetails(product.name, product.price, product.description, product.image1, product.image2, true, product.amountInStock, product.category))
   const [isAvailable, setIsAvailable] = useState(true)
   const [category, setCategory] = useState("")
 
@@ -162,9 +163,15 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="image" className="text-right">
-              Image URL
+              Image1URL
             </Label>
-            <Input name={"image"} onChange={handleChange} id="image" value={newProduct.image} placeholder={product.image} className="col-span-3" />
+            <Input name={"image1"} onChange={handleChange} id="image1" value={newProduct.image1} placeholder={product.image1} className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="image" className="text-right">
+              Image2URL
+            </Label>
+            <Input name={"image2"} onChange={handleChange} id="image2" value={newProduct.image2} placeholder={product.image2} className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="price" className="text-right">
@@ -189,7 +196,7 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
           <SheetClose asChild>
             <Button onClick={handleEditSubmit} type="submit">Save changes</Button>
           </SheetClose>
-          <Button onClick={handleDeleteSubmit} variant="destructive">Delete product</Button>
+          <DeleteAlertComp handleDeleteSubmit={handleDeleteSubmit} />
         </SheetFooter>
       </SheetContent>
     </Sheet>

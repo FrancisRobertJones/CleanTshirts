@@ -15,11 +15,11 @@ interface IAdminTableComponentProps {
 
 }
 
-const adminTableComponent = ( ) => {
+const AdminTableComponent = ( ) => {
     return (
         <>
             <div className="flex flex-col items-left">
-                <h1 className="text-3xl my-12">Admin - products</h1>
+                <h1 className="text-3xl my-12">Admin - Orders</h1>
                 <div className="mb-12"></div>
             </div>
 
@@ -41,7 +41,7 @@ const adminTableComponent = ( ) => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right">< /></TableCell>
+                        <TableCell className="text-right"></TableCell>
                     </TableRow>
 
                     <TableRow>
@@ -49,7 +49,7 @@ const adminTableComponent = ( ) => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right">< /></TableCell>
+                        <TableCell className="text-right"></TableCell>
 
                     </TableRow>
                     <TableRow>
@@ -57,7 +57,7 @@ const adminTableComponent = ( ) => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right">< /></TableCell>
+                        <TableCell className="text-right"></TableCell>
 
                     </TableRow>
                     <TableRow>
@@ -65,7 +65,7 @@ const adminTableComponent = ( ) => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right">< /></TableCell>
+                        <TableCell className="text-right"></TableCell>
 
                     </TableRow>
                     <TableRow>
@@ -73,7 +73,7 @@ const adminTableComponent = ( ) => {
                         <TableCell>Paid</TableCell>
                         <TableCell>Credit Card</TableCell>
                         <TableCell className="text-right">$250.00</TableCell>
-                        <TableCell className="text-right">< /></TableCell>
+                        <TableCell className="text-right"></TableCell>
 
                     </TableRow>
 
@@ -84,4 +84,4 @@ const adminTableComponent = ( ) => {
     )
 }
 
-export default adminTableComponent
+export default AdminTableComponent

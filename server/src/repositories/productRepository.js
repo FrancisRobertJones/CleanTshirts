@@ -38,7 +38,8 @@ class ProductRepository {
                 "status": productData["status"], 
                 "name": productData["name"], 
                 "price": productData["price"], 
-                "image": productData["image"],
+                "image1": productData["image1"],
+                "image2": productData["image2"],
                 "amountInStock": productData["amountInStock"],
                 "description": productData["description"],
                 "category": productData["category"]

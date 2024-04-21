@@ -28,7 +28,7 @@ interface IAddProductCompProps {
 
 const AddProductComp = ({ fetchAllProducts }: IAddProductCompProps) => {
 
-    const [newProduct, setNewProduct] = useState<NewProductDetails>(new NewProductDetails("", 0, "", "", false, 0, ""))
+    const [newProduct, setNewProduct] = useState<NewProductDetails>(new NewProductDetails("", 0, "", "", "", false, 0, ""))
     const [isAvailable, setIsAvailable] = useState(false)
     const [category, setCategory] = useState("")
 
@@ -47,13 +47,13 @@ const AddProductComp = ({ fetchAllProducts }: IAddProductCompProps) => {
     }
 
     const handleCategoryChange = (value: string) => {
-            setCategory(value)
+        setCategory(value)
     }
 
     useEffect(() => {
         setNewProduct({ ...newProduct, category: category })
-    },[category])
-  
+    }, [category])
+
 
 
     const handleProductSubmit = async () => {
@@ -123,10 +123,16 @@ const AddProductComp = ({ fetchAllProducts }: IAddProductCompProps) => {
                         <Input id="description" name="description" onChange={handleChange} placeholder="Description" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="image" className="text-right">
-                            Image URL
+                        <Label htmlFor="image1" className="text-right">
+                            Image1URL
                         </Label>
-                        <Input id="image" name="image" onChange={handleChange} placeholder="Image URL" className="col-span-3" />
+                        <Input id="image1" name="image1" onChange={handleChange} placeholder="Image1 URL" className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="image2" className="text-right">
+                            Image2URL
+                        </Label>
+                        <Input id="image2" name="image2" onChange={handleChange} placeholder="Image2 URL" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="price" className="text-right">
