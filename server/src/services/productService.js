@@ -23,8 +23,9 @@ class ProductService {
         const updatedProduct = await this.productRepository.edit(productId, productData)
         return updatedProduct
     }
-    deleteProduct() {
-        this.productRepository.delete(productId)
+    async deleteProduct(productId) {
+        const deletedConfirmation = await this.productRepository.delete(productId)
+        return deletedConfirmation
     }
 }
 

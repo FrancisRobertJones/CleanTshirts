@@ -11,17 +11,23 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { NewProduct } from "@/models/classes/products"
+import { NewProductDetails } from "@/models/classes/products"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { toast, useToast } from "@/components/ui/use-toast"
+import { ICreateProductRes } from "@/models/interfaces/products"
+import { ToastAction } from "@radix-ui/react-toast"
 
 
-const AddProductComp = () => {
+interface IAddProductCompProps {
+    fetchAllProducts: () => void
+}
 
-    const [newProduct, setNewProduct] = useState<NewProduct>(new NewProduct("", "", 0, "", "", "", 0, ""))
 
+const AddProductComp = ({fetchAllProducts}: IAddProductCompProps) => {
 
-    //TODO Sort state update and submission of data 
+    const [newProduct, setNewProduct] = useState<NewProductDetails>(new NewProductDetails("", 0, "", "", "", 0, ""))
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewProduct({
             ...newProduct,
@@ -30,11 +36,25 @@ const AddProductComp = () => {
         )
     }
 
+
     const handleProductSubmit = async () => {
         try {
-            const res = await axios.post("http://localhost:3000/products/create", newProduct)
-            console.log(res, "here is the response")
-        } catch(error) {
+            const res = await axios.post<ICreateProductRes>("http://localhost:3000/products/create", newProduct)
+
+            if (res.data.newProduct.acknowledged) {
+                toast({
+                    title: "New product created",
+                    description: `Id number ${res.data.newProduct.insertedId}`,
+                })
+                fetchAllProducts()
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your product creation.",
+                  })
+            }
+        } catch (error) {
             console.log("there has been an error creating the product")
         }
 
@@ -63,43 +83,43 @@ const AddProductComp = () => {
                         <Label htmlFor="status" className="text-right">
                             Status
                         </Label>
-                        <Input id="status" onChange={handleChange} value={newProduct?.status} placeholder="Status" className="col-span-3" />
+                        <Input id="status" name="status" onChange={handleChange} placeholder="Status" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="name" className="text-right">
                             Name
                         </Label>
-                        <Input id="name" onChange={handleChange} value={newProduct?.name} placeholder="Name" className="col-span-3" />
+                        <Input id="name" name="name" onChange={handleChange} placeholder="Name" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="description" className="text-right">
                             Description
                         </Label>
-                        <Input id="description" onChange={handleChange} value={newProduct?.description} placeholder="Description" className="col-span-3" />
+                        <Input id="description" name="description" onChange={handleChange} placeholder="Description" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="image" className="text-right">
                             Image URL
                         </Label>
-                        <Input id="image" onChange={handleChange} value={newProduct?.image} placeholder="Image URL" className="col-span-3" />
+                        <Input id="image" name="image" onChange={handleChange} placeholder="Image URL" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="price" className="text-right">
                             Price
                         </Label>
-                        <Input id="price" onChange={handleChange} value={newProduct?.price} placeholder="Price" className="col-span-3" />
+                        <Input id="price" name="price" onChange={handleChange} value={newProduct?.price} placeholder="Price" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="category" className="text-right">
                             Category
                         </Label>
-                        <Input id="category" onChange={handleChange} value={newProduct?.category} placeholder="Category" className="col-span-3" />
+                        <Input id="category" name="category" onChange={handleChange} value={newProduct?.category} placeholder="Category" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="amountInStock" className="text-right">
                             Num. in Stock
                         </Label>
-                        <Input id="amountInStock" onChange={handleChange} value={newProduct?.amountInStock} placeholder="Amount in stock" className="col-span-3" />
+                        <Input id="amountInStock" name="amountInStock" onChange={handleChange} value={newProduct?.amountInStock} placeholder="Amount in stock" className="col-span-3" />
                     </div>
                 </div>
                 <SheetFooter>

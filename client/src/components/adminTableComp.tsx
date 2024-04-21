@@ -20,7 +20,7 @@ const adminTableComponent = ( ) => {
         <>
             <div className="flex flex-col items-left">
                 <h1 className="text-3xl my-12">Admin - products</h1>
-                <div className="mb-12"><AddProductComp /></div>
+                <div className="mb-12"></div>
             </div>
 
 

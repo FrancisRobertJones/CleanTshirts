@@ -1,5 +1,7 @@
 const DatabaseConnection = require("../dataBase/DatabaseConnection")
 const mongodb = require("mongodb")
+const { ObjectId } = require('mongodb');
+
 
 //note to self, repositories strictly interact with database. return to servicelayer, which then passes back to controller, which then formats as needed and sends response back to client. 
 
@@ -38,7 +40,7 @@ class ProductRepository {
                 "price": productData["price"], 
                 "image": productData["image"],
                 "amountInStock": productData["amountInStock"],
-                "description": product["description"] 
+                "description": productData["description"] 
             })
             return newProduct
         }
@@ -68,6 +70,22 @@ class ProductRepository {
         catch (error) {
             console.error('Failed to create product:', error);
             throw new Error('Failed to create product');
+        }
+    }
+
+    async delete(productId) {
+        try {
+            console.log("here is the productID for deletion", productId)
+            await this.connect()
+            const collection = this.db.collection('products')
+
+            const deletedProduct = await collection.deleteOne({ _id: new ObjectId(productId) })
+            console.log(deletedProduct)
+            return deletedProduct
+        }
+        catch (error) {
+            console.error('Failed to delete product:', error);
+            throw new Error('Failed to delete product');
         }
     }
 }

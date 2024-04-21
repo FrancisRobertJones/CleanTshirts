@@ -13,3 +13,9 @@ export interface IProduct {
     category: string;
 }
 
+export interface ICreateProductRes {
+    newProduct: {
+        acknowledged: boolean,
+        insertedId: string
+    } 
+}

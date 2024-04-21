@@ -12,12 +12,48 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { IProduct } from "@/models/interfaces/products"
+import axios from "axios"
+import { toast } from "./ui/use-toast"
 
 interface IEditProductProps {
-  product: IProduct
+  product: IProduct,
+  fetchAllProducts: () => void
 }
 
-export function EditProduct({ product }: IEditProductProps) {
+export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
+
+  const handleDelete = async () => {
+    try {
+      const res = await axios.post("http://localhost:3000/products/delete", { productId: product._id })
+      console.log("res from deletion", res.data)
+      if (res.status === 200) {
+        toast({
+          title: "Product deleted",
+          description: `Id number ${product._id} has been deleted`,
+        })
+        fetchAllProducts()
+      } else if (res.status === 404) {
+        toast({
+          variant: "destructive",
+          title: "Product cannot be found",
+          description: `Id number ${product._id} cannot be found`,
+        })
+        fetchAllProducts()
+    
+    }} catch (error) {
+      console.log(error)
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: `There was a problem with your product deletion ${error}`,
+      })
+    }
+  }
+
+//TODO sort editing functions for product editing
+
+
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -35,7 +71,7 @@ export function EditProduct({ product }: IEditProductProps) {
             <Label htmlFor="ID" className="text-right">
               ID
             </Label>
-            <Input id="id" value={product._id} className="col-span-3" disabled/>
+            <Input id="id" value={product._id} className="col-span-3" disabled />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="status" className="text-right">
@@ -51,13 +87,13 @@ export function EditProduct({ product }: IEditProductProps) {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="description" className="text-right">
-            Description
+              Description
             </Label>
             <Input id="description" placeholder={product.description} className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="image" className="text-right">
-            Image URL
+              Image URL
             </Label>
             <Input id="image" placeholder={product.image} className="col-span-3" />
           </div>
@@ -84,6 +120,7 @@ export function EditProduct({ product }: IEditProductProps) {
           <SheetClose asChild>
             <Button type="submit">Save changes</Button>
           </SheetClose>
+          <Button onClick={handleDelete} variant="destructive">Delete product</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

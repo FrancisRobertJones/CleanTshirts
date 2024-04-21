@@ -23,7 +23,7 @@ class ProductController {
             const newProduct = await this.productService.createProduct(productData);
             //TODO deal with newProductID
             console.log("this is the newly created product", newProduct)
-            res.status(200).json({ "new product": newProduct })
+            res.status(200).json({ newProduct })
         } catch (error) {
             res.status(500).json({ "error": error })
         }
@@ -49,10 +49,20 @@ class ProductController {
 
 
     deleteProduct = async (req, res) => {
-        productId = req.params.id
-        this.productService.deleteProduct(productId)
+        const { productId } = req.body
+        try {
+            const deletionRes = await this.productService.deleteProduct(productId)
+            if (deletionRes.acknowledged && deletionRes.deletedCount > 0) {
+                res.status(200).json({ message: "Product deleted successfully", details: deletionRes });
+            } else if (deletionRes.acknowledged && deletionRes.deletedCount === 0) {
+                res.status(404).json({ message: "No product found with the provided ID" });
+            } else {
+                res.status(500).json({ message: "Failed to delete product", details: deletionRes });
+            }
+        } catch (error) {
+            console.log("issue deleting product", error)
+        }
     }
-
 }
 
 module.exports = ProductController

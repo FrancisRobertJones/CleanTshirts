@@ -14,14 +14,15 @@ import AddProductComp from "./addProductComp"
 
 interface IProductTableCompoProps {
     allProducts: IProduct[]
+    fetchAllProducts: () => void
 }
 
-const ProductTable = ({ allProducts }: IProductTableCompoProps) => {
+const ProductTable = ({ allProducts, fetchAllProducts }: IProductTableCompoProps) => {
     return (
         <>
             <div className="flex flex-col items-left">
                 <h1 className="text-3xl my-12">Products in our catalogue</h1>
-                <div className="mb-12"><AddProductComp /></div>
+                <div className="mb-12"><AddProductComp fetchAllProducts= {fetchAllProducts} /></div>
             </div>
 
 
@@ -50,7 +51,7 @@ const ProductTable = ({ allProducts }: IProductTableCompoProps) => {
                                 <TableCell>{product.name}</TableCell>
                                 <TableCell className="text-right">{product.price}</TableCell>
                                 <TableCell className="text-right">{product.amountInStock}</TableCell>
-                                <TableCell className="text-right"><EditProduct product={product} /></TableCell>
+                                <TableCell className="text-right"><EditProduct fetchAllProducts={fetchAllProducts} product={product} /></TableCell>
                             </TableRow>)
                     })
                     }
