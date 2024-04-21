@@ -66,11 +66,11 @@ export function Navbar() {
                                         </a>
                                     </NavigationMenuLink>
                                 </li>
-                                <ListItem className="p-4 transition-colors" href="/admin" title="Admin">
-                                    Login to view, edit & add products, (admin only)
+                                <ListItem href="/auth" title="Admin">
+                                    Log in / register
                                 </ListItem>
-                                <ListItem href="/" title="Admin">
-                                    Read more
+                                <ListItem className="p-4 transition-colors" href="/admin" title="Admin">
+                                    Admin: view, edit & add stock
                                 </ListItem>
                                 <ListItem href="/" title="Admin">
                                     Contact us
