@@ -20,7 +20,7 @@ export const CartReducer = (cartItems: CartProduct[], action: ICartAction) => {
             const clonedCart = [...cartItems]
             const itemThatsAlreadyAdded = clonedCart.find((item) => item.product._id === action.payload?._id)
             if (itemThatsAlreadyAdded) {
-                itemThatsAlreadyAdded.quantity++
+                itemThatsAlreadyAdded.quantity ++
             } else {
                 clonedCart.push(new CartProduct(1, action.payload))
             }

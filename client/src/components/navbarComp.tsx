@@ -21,15 +21,26 @@ import { toast } from "./ui/use-toast"
 export function Navbar() {
 
     const { cartItems, dispatchCart } = React.useContext(CartContext)
+    const [cartTotal, setCartTotal] = React.useState(0)
 
     const removeFromCart = (product: IProduct) => {
         dispatchCart({ type: CartActionType.REMOVEFROMCART, payload: product })
         toast({
             title: "Product removed from cart",
             description: ` ${product.name} removed from cart`,
-          })
+        })
 
     }
+
+    React.useEffect(() => {
+        const totalCountArray: number[] = []
+        cartItems.map((item) => {
+            totalCountArray.push(item.quantity)
+        })
+        const totalNumber = totalCountArray.reduce((x, y) => x + y, 0)
+        setCartTotal(totalNumber)
+
+    }, [cartItems])
 
     return (
         <>
@@ -68,7 +79,7 @@ export function Navbar() {
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <NavigationMenuTrigger><img src="../../public/cart.svg" className="h-4" alt="" /><span className="relative text-xs mb-2 ml-1">{ }</span></NavigationMenuTrigger>
+                        <NavigationMenuTrigger><img src="../../public/cart.svg" className="h-4" alt="" /><span className="relative text-xs mb-2 ml-1">{cartTotal}</span></NavigationMenuTrigger>
                         <NavigationMenuContent>
                             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                                 <li className="row-span-3">
@@ -78,11 +89,19 @@ export function Navbar() {
                                 </li>
                                 {cartItems.map((cartItem) => {
                                     return (<ListItem key={cartItem.product._id} title={cartItem.product.name} showRemoveButton={true} product={cartItem.product} removeFromCart={removeFromCart}>
-                                        {cartItem.product.name} <span className="font-bold">Quantity:</span> {cartItem.quantity}
+                                        {cartItem.product.name} {cartItem.quantity}
                                     </ListItem>)
                                 })}
 
-                                <Button className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Checkout</Button>
+                                {cartTotal ?
+                                    <>
+                                        <Button className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Checkout</Button>
+                                        <Button onClick={() => dispatchCart({ type: CartActionType.EMPTYCART })} variant="destructive" className="mt-6">Empty cart</Button>
+                                    </>
+                                    :
+                                    <h4 className="text-xs mt-6">Your cart is empty</h4>
+                                }
+
                             </ul>
                         </NavigationMenuContent>
                     </NavigationMenuItem>
@@ -95,7 +114,7 @@ export function Navbar() {
 
 const ListItem = React.forwardRef<
     React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a"> & { showRemoveButton?: boolean, product?: IProduct, removeFromCart? : (product: IProduct) => void }
+    React.ComponentPropsWithoutRef<"a"> & { showRemoveButton?: boolean, product?: IProduct, removeFromCart?: (product: IProduct) => void }
 >(({ className, title, children, showRemoveButton, removeFromCart, product, ...props }, ref) => {
 
 

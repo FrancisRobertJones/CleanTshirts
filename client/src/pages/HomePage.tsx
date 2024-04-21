@@ -23,65 +23,13 @@ const HomePage = () => {
 
     const addToCart = (product: IProduct) => {
         toast({
-            variant: "default",
             title: "Product added to cart",
             description: `${product.name} added to cart`,
         })
         dispatchCart({ type: CartActionType.ADDTOCART, payload: product })
+      
     }
 
-
-    /*    const products = [
-           {
-               id: 1,
-               title: 'T-shirt Front',
-               imageFront: '../../public/samso1F.jpeg',
-               imageBack: '../../public/samso1B.jpeg',
-               price: "200SEK",
-               details: 'Details of T-shirt 1'
-           },
-           {
-               id: 2,
-               title: 'T-shirt Front',
-               imageFront: '../../public/samso2F.jpeg',
-               imageBack: '../../public/samso2B.jpeg',
-               price: "200SEK",
-               details: 'Details of T-shirt 2'
-           },
-           {
-               id: 3,
-               title: 'T-shirt Front',
-               imageFront: '../../public/samso3F.jpeg',
-               imageBack: '../../public/samso3B.jpeg',
-               price: "200SEK",
-               details: 'Details of T-shirt 3'
-           },
-           {
-               id: 4,
-               title: 'T-shirt Front',
-               imageFront: '../../public/samso4F.jpeg',
-               imageBack: '../../public/samso4B.jpeg',
-               price: "200SEK",
-               details: 'Details of T-shirt 4'
-           },
-           {
-               id: 5,
-               title: 'T-shirt Front',
-               imageFront: '../../public/samso5F.jpeg',
-               imageBack: '../../public/samso5b.jpeg',
-               price: "200SEK",
-               details: 'Details of T-shirt 5'
-           },
-           {
-               id: 6,
-               title: 'T-shirt Front',
-               imageFront: '../../public/samso6F.jpeg',
-               imageBack: '../../public/samso6B.jpeg',
-               price: "200SEK",
-               details: 'Details of T-shirt 6'
-           },
-   
-       ]; */
 
     return (
         <div className="container mx-auto p-4">
