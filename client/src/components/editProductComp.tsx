@@ -26,7 +26,7 @@ interface IEditProductProps {
 }
 
 export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
-  const [newProduct, setNewProduct] = useState(new NewProductDetails("", 0, "", "", true, 0, ""))
+  const [newProduct, setNewProduct] = useState(new NewProductDetails(product.name, product.price, product.description, product.image, true, product.amountInStock, product.category))
   const [isAvailable, setIsAvailable] = useState(true)
   const [category, setCategory] = useState("")
 
@@ -57,7 +57,7 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
 
 
 
-  const handleDelete = async () => {
+  const handleDeleteSubmit = async () => {
     try {
       const res = await axios.post("http://localhost:3000/products/delete", { productId: product._id })
       console.log("res from deletion", res.data)
@@ -88,7 +88,7 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
 
   //TODO handle different data types, number etc. 
 
-  const handleEdit = async () => {
+  const handleEditSubmit = async () => {
     try {
       setNewProduct({ ...newProduct, status: isAvailable })
 
@@ -152,25 +152,25 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
-            <Input name={"name"} onChange={handleChange} id="name" placeholder={product.name} className="col-span-3" />
+            <Input name={"name"} onChange={handleChange} id="name" placeholder={product.name} value={newProduct.name} className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="description" className="text-right">
               Description
             </Label>
-            <Input name={"description"} onChange={handleChange} id="description" placeholder={product.description} className="col-span-3" />
+            <Input name={"description"} onChange={handleChange} id="description" value={newProduct.description} placeholder={product.description} className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="image" className="text-right">
               Image URL
             </Label>
-            <Input name={"image"} onChange={handleChange} id="image" placeholder={product.image} className="col-span-3" />
+            <Input name={"image"} onChange={handleChange} id="image" value={newProduct.image} placeholder={product.image} className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="price" className="text-right">
               Price
             </Label>
-            <Input name={"price"} onChange={handleChange} id="price" className="col-span-3" />
+            <Input name={"price"} onChange={handleChange} value={newProduct.price} id="price" className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="category" className="text-right">
@@ -182,14 +182,14 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
             <Label htmlFor="amountInStock" className="text-right">
               Num. in Stock
             </Label>
-            <Input name={"amountInStock"} onChange={handleChange} id="amountInStock" className="col-span-3" />
+            <Input name={"amountInStock"} onChange={handleChange} value={newProduct.amountInStock} id="amountInStock" className="col-span-3" />
           </div>
         </div>
         <SheetFooter>
           <SheetClose asChild>
-            <Button onClick={handleEdit} type="submit">Save changes</Button>
+            <Button onClick={handleEditSubmit} type="submit">Save changes</Button>
           </SheetClose>
-          <Button onClick={handleDelete} variant="destructive">Delete product</Button>
+          <Button onClick={handleDeleteSubmit} variant="destructive">Delete product</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
