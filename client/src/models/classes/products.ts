@@ -4,7 +4,7 @@ export class NewProductDetails {
         public price: number,
         public description: string,
         public image: string,
-        public status: string,
+        public status: boolean,
         public amountInStock: number,
         public category: string
     ) { }

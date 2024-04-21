@@ -40,7 +40,8 @@ class ProductRepository {
                 "price": productData["price"], 
                 "image": productData["image"],
                 "amountInStock": productData["amountInStock"],
-                "description": productData["description"] 
+                "description": productData["description"],
+                "category": productData["category"]
             })
             return newProduct
         }
@@ -62,7 +63,8 @@ class ProductRepository {
                     "amountInStock": productData["amountInStock"],
                     "status": productData["status"],
                     "price": productData["price"],
-                    "image": productData["image"]
+                    "image": productData["image"],
+                    "category": productData["category"]
                 }
             })
             return updatedProduct

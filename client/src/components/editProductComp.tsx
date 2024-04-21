@@ -14,8 +14,11 @@ import {
 import { IProduct } from "@/models/interfaces/products"
 import axios from "axios"
 import { toast } from "./ui/use-toast"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { NewProductDetails } from "@/models/classes/products"
+import { Switch } from "@/components/ui/switch"
+import { CategorySelectComp } from "./categorySelectComp"
+
 
 interface IEditProductProps {
   product: IProduct,
@@ -23,7 +26,10 @@ interface IEditProductProps {
 }
 
 export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
-  const [newProduct, setNewProduct] = useState(new NewProductDetails( "", 0, "", "", "", 0, ""))
+  const [newProduct, setNewProduct] = useState(new NewProductDetails("", 0, "", "", true, 0, ""))
+  const [isAvailable, setIsAvailable] = useState(true)
+  const [category, setCategory] = useState("")
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewProduct({
@@ -34,6 +40,22 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
     console.log(newProduct)
 
   }
+
+  const handleAvailableToggle = (newState: boolean) => {
+    setIsAvailable(newState);
+    setNewProduct({ ...newProduct, status: newState })
+
+  }
+
+  const handleCategoryChange = (value: string) => {
+    setCategory(value)
+  }
+
+  useEffect(() => {
+    setNewProduct({ ...newProduct, category: category })
+  }, [category])
+
+
 
   const handleDelete = async () => {
     try {
@@ -64,9 +86,13 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
     }
   }
 
+  //TODO handle different data types, number etc. 
+
   const handleEdit = async () => {
     try {
-      const res = await axios.put(`http://localhost:3000/products/update/${product._id}`, newProduct )
+      setNewProduct({ ...newProduct, status: isAvailable })
+
+      const res = await axios.put(`http://localhost:3000/products/update/${product._id}`, newProduct)
       console.log("res from edit", res.data)
       if (res.status === 200) {
         toast({
@@ -95,6 +121,8 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
 
 
 
+
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -116,9 +144,9 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="status" className="text-right">
-              Status
+              Available
             </Label>
-            <Input name={"status"} onChange={handleChange} id="status" placeholder={product.status} className="col-span-3" />
+            <Switch id="status" checked={isAvailable} onCheckedChange={handleAvailableToggle} />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
@@ -148,7 +176,7 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
             <Label htmlFor="category" className="text-right">
               Category
             </Label>
-            <Input name={"category"} onChange={handleChange} id="category" placeholder={product.category} className="col-span-3" />
+            <CategorySelectComp handleCategoryChange={handleCategoryChange} />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="amountInStock" className="text-right">

@@ -16,7 +16,9 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { toast, useToast } from "@/components/ui/use-toast"
 import { ICreateProductRes } from "@/models/interfaces/products"
-import { ToastAction } from "@radix-ui/react-toast"
+import { Switch } from "@/components/ui/switch"
+import { CategorySelectComp } from "./categorySelectComp"
+
 
 
 interface IAddProductCompProps {
@@ -24,9 +26,11 @@ interface IAddProductCompProps {
 }
 
 
-const AddProductComp = ({fetchAllProducts}: IAddProductCompProps) => {
+const AddProductComp = ({ fetchAllProducts }: IAddProductCompProps) => {
 
-    const [newProduct, setNewProduct] = useState<NewProductDetails>(new NewProductDetails("", 0, "", "", "", 0, ""))
+    const [newProduct, setNewProduct] = useState<NewProductDetails>(new NewProductDetails("", 0, "", "", false, 0, ""))
+    const [isAvailable, setIsAvailable] = useState(false)
+    const [category, setCategory] = useState("")
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewProduct({
@@ -36,9 +40,25 @@ const AddProductComp = ({fetchAllProducts}: IAddProductCompProps) => {
         )
     }
 
+    const handleAvailableToggle = (newState: boolean) => {
+        setIsAvailable(newState);
+        setNewProduct({ ...newProduct, status: newState })
+
+    }
+
+    const handleCategoryChange = (value: string) => {
+            setCategory(value)
+    }
+
+    useEffect(() => {
+        setNewProduct({ ...newProduct, category: category })
+    },[category])
+  
+
 
     const handleProductSubmit = async () => {
         try {
+
             const res = await axios.post<ICreateProductRes>("http://localhost:3000/products/create", newProduct)
 
             if (res.data.newProduct.acknowledged) {
@@ -52,7 +72,7 @@ const AddProductComp = ({fetchAllProducts}: IAddProductCompProps) => {
                     variant: "destructive",
                     title: "Uh oh! Something went wrong.",
                     description: "There was a problem with your product creation.",
-                  })
+                })
             }
         } catch (error) {
             console.log("there has been an error creating the product")
@@ -83,7 +103,12 @@ const AddProductComp = ({fetchAllProducts}: IAddProductCompProps) => {
                         <Label htmlFor="status" className="text-right">
                             Status
                         </Label>
-                        <Input id="status" name="status" onChange={handleChange} placeholder="Status" className="col-span-3" />
+                        <Switch
+                            id="example-switch"
+                            checked={isAvailable}
+                            onCheckedChange={handleAvailableToggle}
+                            aria-label="Toggle feature"
+                        />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="name" className="text-right">
@@ -113,7 +138,7 @@ const AddProductComp = ({fetchAllProducts}: IAddProductCompProps) => {
                         <Label htmlFor="category" className="text-right">
                             Category
                         </Label>
-                        <Input id="category" name="category" onChange={handleChange} value={newProduct?.category} placeholder="Category" className="col-span-3" />
+                        <CategorySelectComp handleCategoryChange={handleCategoryChange} />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="amountInStock" className="text-right">

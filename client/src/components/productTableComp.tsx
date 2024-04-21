@@ -33,6 +33,7 @@ const ProductTable = ({ allProducts, fetchAllProducts }: IProductTableCompoProps
                         <TableHead className="w-[100px]">ID</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Name</TableHead>
+                        <TableHead>Category</TableHead>
                         <TableHead className="text-right">Price</TableHead>
                         <TableHead className="text-right">No. in stock</TableHead>
                         <TableHead className="text-right">Edit</TableHead>
@@ -47,8 +48,9 @@ const ProductTable = ({ allProducts, fetchAllProducts }: IProductTableCompoProps
                         return (
                             <TableRow key={product._id}>
                                 <TableCell className="font-medium">{product._id}</TableCell>
-                                <TableCell>{product.status}</TableCell>
+                                <TableCell>{product.status?.toString()}</TableCell>
                                 <TableCell>{product.name}</TableCell>
+                                <TableCell>{product.category}</TableCell>
                                 <TableCell className="text-right">{product.price}</TableCell>
                                 <TableCell className="text-right">{product.amountInStock}</TableCell>
                                 <TableCell className="text-right"><EditProduct fetchAllProducts={fetchAllProducts} product={product} /></TableCell>
