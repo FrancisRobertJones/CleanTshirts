@@ -3,6 +3,7 @@ const express = require('express')
 const DatabaseConnection = require('./dataBase/DatabaseConnection')
 const bodyParser = require('body-parser')
 const productsRouter = require('./routes/productRoutes')
+const authRouter = require('./routes/authRoutes')
 const cors = require('cors')
 
 let app = express()
@@ -18,6 +19,7 @@ app.use(cors())
 
 
 app.use("/products", productsRouter)
+app.use("/auth", authRouter)
 
 
 app.listen(PORT, () => {
