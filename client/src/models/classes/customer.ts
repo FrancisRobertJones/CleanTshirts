@@ -5,7 +5,7 @@ export class AccountCreation {
         public address: string,
         public state: string,
         public country: string,
-        public postcode: number
+        public postcode: string
     ) {}
 }
 

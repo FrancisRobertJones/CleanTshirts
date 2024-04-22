@@ -1,4 +1,6 @@
 const AuthRepository = require('../repositories/authRepository')
+const bcrypt = require('bcrypt');
+
 
 class AuthService {
     constructor() {
@@ -8,13 +10,40 @@ class AuthService {
 
     async createUser(userData) {
         const { email } = userData
-        const userExistsCheck = await this.authRepository.findUser(userData.email)
+        const userExistsCheck = await this.authRepository.findUser(email)
         if (userExistsCheck) {
             throw new Error('User already exists')
+        } else {
+            try {
+                const passUnhashed = userData["password"]
+                const passHashed = await bcrypt.hash(passUnhashed, 10)
+                const userDataHashed = { ...userData, password: passHashed }
+                const newUser = await this.authRepository.createUser(userDataHashed)
+                return newUser
+            } catch (error) {
+                console.log("there has been an error creating the user", error)
+                throw new Error("Problem creating user", error)
+            }
         }
-        //check if user exists
-        //if user doesn't exist, then create a user
 
+    }
+
+    async signIn(userData) {
+        const { email } = userData
+        const userExistsCheck = await this.authRepository.findUser(email)
+        if (!userExistsCheck) {
+            throw new Error("User doesn't exist")
+        } else {
+            try {
+                const userCredentials = await this.authRepository.getLogin(userData)
+                const hashedPass = userCredentials["password"]
+                const authSuccess = bcrypt.compare(userData["password"], hashedPass)
+                return authSuccess
+            } catch (error) {
+                console.log("there has been an error logging the user in", error)
+                throw new Error("Problem logging in", error)
+            }
+        }
     }
 }
 

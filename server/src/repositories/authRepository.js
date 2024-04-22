@@ -14,20 +14,35 @@ class AuthRepository {
         try {
             await this.connect()
             const collection = this.db.collection('users')
-            const userExists = await collection.findOne({_id: email})
+            const userExists = await collection.findOne({ _id: email })
             return userExists
         } catch (error) {
             console.log("error finding user", error)
+            return error
         }
     }
 
-    async createUser(userData) {
-        try {
+    async createUser(userDataHashed) {
 
-        } catch (error) {
-
-        }
+        await this.connect()
+        const collection = this.db.collection('users')
+        return await collection.insertOne({
+            "_id": userDataHashed["email"],
+            "password": userDataHashed["password"],
+            "address": userDataHashed["address"],
+            "state": userDataHashed["state"],
+            "country": userDataHashed["country"],
+            "postcode": userDataHashed["postcode"]
+        })
     }
+
+    async getLogin(userData) {
+        const { email } = userData
+        await this.connect()
+        const collection = this.db.collection('users')
+        return await collection.findOne({ _id: email })
+    }
+
 }
 
 

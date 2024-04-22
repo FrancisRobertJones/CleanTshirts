@@ -19,10 +19,11 @@ import {
 } from "@/components/ui/tabs"
 import { AccountCreation, PasswordCheck } from '@/models/classes/customer'
 import PasswordWarning from '@/components/passwordWarning'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
+import { toast } from '@/components/ui/use-toast'
 
 const Authpage = () => {
-    const [newCustomer, setNewCustomer] = useState<AccountCreation>(new AccountCreation("", "", "", "", "", 0))
+    const [newCustomer, setNewCustomer] = useState<AccountCreation>(new AccountCreation("", "", "", "", "", ""))
     const [passwords, setPasswords] = useState<PasswordCheck>(new PasswordCheck("", "", true))
 
 
@@ -47,26 +48,52 @@ const Authpage = () => {
 
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault()
 
-        if(passwords.matches && newCustomer.address && newCustomer.country && newCustomer.email && newCustomer.postcode && newCustomer.state){
-            setNewCustomer({...newCustomer, password: passwords.password1})
-        } 
+        if (passwords.matches && newCustomer.address && newCustomer.country && newCustomer.email && newCustomer.postcode && newCustomer.state) {
+            setNewCustomer({ ...newCustomer, password: passwords.password1 })
+        }
 
         //TODO fix backend and start auth process.
-        /* const res = await axios.post() */
+        try {
+            const res = await axios.post("http://localhost:3000/auth/create", newCustomer)
+            toast({
+                title: "Account created!",
+                description: "Please log in to continue"
+            })
+            console.log(res)
+            setNewCustomer(new AccountCreation("", "", "", "", "", "" ))
+            setPasswords(new PasswordCheck("", "", false))
+        } catch (error) {
+
+            if (axios.isAxiosError(error) && error.response?.status === 409) {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "An account with this email already exists!",
+                })
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "An unknown error occured during account creation!",
+                })
+            }
+            console.log(error)
+        }
+
     }
+
 
 
 
     return (
         <div className='flex justify-center'>
-            <Tabs defaultValue="account" className="w-[400px]">
+            <Tabs defaultValue="Register" className="w-[400px]">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="account">Account</TabsTrigger>
-                    <TabsTrigger value="password">Password</TabsTrigger>
+                    <TabsTrigger value="Register">Register</TabsTrigger>
+                    <TabsTrigger value="Login">Login</TabsTrigger>
                 </TabsList>
-                <TabsContent value="account">
+                <TabsContent value="Register">
                     <Card>
                         <CardHeader>
                             <CardTitle>Register</CardTitle>
@@ -77,32 +104,32 @@ const Authpage = () => {
                         <CardContent className="space-y-2">
                             <div className="space-y-1">
                                 <Label htmlFor="username">Email</Label>
-                                <Input onChange={handleChange} id="email" name="email" type="email" />
+                                <Input value={newCustomer.email} onChange={handleChange} id="email" name="email" type="email" />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="username">Password {!passwords.matches && <PasswordWarning />}
                                 </Label>
-                                <Input onChange={handlePassWordChange}  name="password1" type="password" />
+                                <Input value={passwords.password1} onChange={handlePassWordChange} name="password1" type="password" />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="username">Confirm password</Label>
-                                <Input onChange={handlePassWordChange}  name="password2" type="password" />
+                                <Input value={passwords.password2} onChange={handlePassWordChange} name="password2" type="password" />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="username">Address</Label>
-                                <Input onChange={handleChange} id="address" name="address" />
+                                <Input value={newCustomer.address} onChange={handleChange} id="address" name="address" />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="username">State</Label>
-                                <Input onChange={handleChange} id="state" name="state" />
+                                <Input value={newCustomer.state} onChange={handleChange} id="state" name="state" />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="country">Country</Label>
-                                <Input onChange={handleChange} id="coutry" name="country" />
+                                <Input value={newCustomer.country} onChange={handleChange} id="coutry" name="country" />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="username">Postcode</Label>
-                                <Input onChange={handleChange} id="postcode" name="postcode" />
+                                <Input value={newCustomer.postcode} onChange={handleChange} id="postcode" name="postcode" />
                             </div>
 
                         </CardContent>
@@ -111,7 +138,7 @@ const Authpage = () => {
                         </CardFooter>
                     </Card>
                 </TabsContent>
-                <TabsContent value="password">
+                <TabsContent value="Login">
                     <Card>
                         <CardHeader>
                             <CardTitle>Login</CardTitle>
