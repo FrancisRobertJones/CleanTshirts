@@ -17,7 +17,7 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import { AccountCreation, PasswordCheck } from '@/models/classes/customer'
+import { AccountCreation, AuthCredentials, PasswordCheck } from '@/models/classes/customer'
 import PasswordWarning from '@/components/passwordWarning'
 import axios, { AxiosError } from 'axios'
 import { toast } from '@/components/ui/use-toast'
@@ -25,7 +25,7 @@ import { toast } from '@/components/ui/use-toast'
 const Authpage = () => {
     const [newCustomer, setNewCustomer] = useState<AccountCreation>(new AccountCreation("", "", "", "", "", ""))
     const [passwords, setPasswords] = useState<PasswordCheck>(new PasswordCheck("", "", true))
-
+    const [authCredentials, setAuthCredentials] = useState<AuthCredentials>(new AuthCredentials("", ""))
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewCustomer({ ...newCustomer, [e.target.name]: e.target.value })
@@ -48,7 +48,7 @@ const Authpage = () => {
 
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-
+        e.preventDefault()
         if (passwords.matches && newCustomer.address && newCustomer.country && newCustomer.email && newCustomer.postcode && newCustomer.state) {
             setNewCustomer({ ...newCustomer, password: passwords.password1 })
         }
@@ -61,7 +61,7 @@ const Authpage = () => {
                 description: "Please log in to continue"
             })
             console.log(res)
-            setNewCustomer(new AccountCreation("", "", "", "", "", "" ))
+            setNewCustomer(new AccountCreation("", "", "", "", "", ""))
             setPasswords(new PasswordCheck("", "", false))
         } catch (error) {
 
@@ -81,6 +81,39 @@ const Authpage = () => {
             console.log(error)
         }
 
+    }
+
+    const handleAuthOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAuthCredentials({ ...authCredentials, [e.target.name]: e.target.value })
+    }
+
+    const handleLogin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        try {
+            const res = await axios.post("http://localhost:3000/auth/login", authCredentials)
+            toast({
+                title: "You are logged in!",
+                description: "You have been logged in, enjoy shopping!",
+            })
+            console.log(res)
+            setAuthCredentials(new AuthCredentials("", ""))
+
+        } catch (error) {
+            //TODO catch error when username is incorrect, currently only throwing correct error when password is incorrect.
+            if (axios.isAxiosError(error) && error.response?.status === 400) {
+                toast({
+                    title: "There has been a problem logging in!",
+                    description: "Your credentials were incorrect",
+                })
+                console.log(error)
+
+            } else {
+                toast({
+                    title: "There has been a problem logging in!",
+                    description: "Unknown error logging in",
+                })
+                console.log(error)
+            }
+        }
     }
 
 
@@ -149,15 +182,15 @@ const Authpage = () => {
                         <CardContent className="space-y-2">
                             <div className="space-y-1">
                                 <Label htmlFor="email">Email</Label>
-                                <Input id="email" name="email" type="email" />
+                                <Input onChange={handleAuthOnChange} value={authCredentials.email} id="email" name="email" type="email" />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="new">Password</Label>
-                                <Input id="password" name="password" type="password" />
+                                <Input onChange={handleAuthOnChange} value={authCredentials.password} id="password" name="password" type="password" />
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button>Save password</Button>
+                            <Button onClick={(e) => handleLogin(e)}>Login</Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>

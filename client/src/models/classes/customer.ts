@@ -6,7 +6,7 @@ export class AccountCreation {
         public state: string,
         public country: string,
         public postcode: string
-    ) {}
+    ) { }
 }
 
 export class PasswordCheck {
@@ -14,5 +14,11 @@ export class PasswordCheck {
         public password1: string,
         public password2: string,
         public matches: boolean
-    ){}
+    ) { }
+}
+export class AuthCredentials {
+    constructor(
+        public email: string,
+        public password: string
+    ) { }
 }

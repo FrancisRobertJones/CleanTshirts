@@ -39,6 +39,7 @@ class AuthService {
                 const hashedPass = userCredentials["password"]
                 const authSuccess = bcrypt.compare(userData["password"], hashedPass)
                 return authSuccess
+                //TODO start a session
             } catch (error) {
                 console.log("there has been an error logging the user in", error)
                 throw new Error("Problem logging in", error)
