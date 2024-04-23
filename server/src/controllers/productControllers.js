@@ -1,15 +1,16 @@
-const ProductService = require("../services/productService");
+const ProductService = require("../classes/Product");
+const Product = require("../classes/Product")
 
 //note to self. takes data provided by routes, and passes to services. 
 
 class ProductController {
     constructor() {
-        this.productService = new ProductService();
+        this.product = new Product()
     }
 
     getProducts = async (req, res) => {
         try {
-            const products = await this.productService.getProducts();
+            const products = await this.product.getAll()
             console.log("here are the products in controllers", products)
             res.status(200).json({ products });
         } catch (error) {
@@ -50,8 +51,9 @@ class ProductController {
 
     deleteProduct = async (req, res) => {
         const { productId } = req.body
+        console.log(productId)
         try {
-            const deletionRes = await this.productService.deleteProduct(productId)
+            const deletionRes = await this.product.setObjectId(productId).delete()
             if (deletionRes.acknowledged && deletionRes.deletedCount > 0) {
                 res.status(200).json({ message: "Product deleted successfully", details: deletionRes });
             } else if (deletionRes.acknowledged && deletionRes.deletedCount === 0) {

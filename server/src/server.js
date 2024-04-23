@@ -1,6 +1,6 @@
 console.log("hello world")
 const express = require('express')
-const DatabaseConnection = require('./dataBase/DatabaseConnection')
+const DatabaseConnection = require('./repositories/dataBaseConnection')
 const bodyParser = require('body-parser')
 const productsRouter = require('./routes/productRoutes')
 const authRouter = require('./routes/authRoutes')
