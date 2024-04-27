@@ -42,15 +42,18 @@ class DatabaseConnection {
         }
         console.log(returnArray)
         return returnArray
+        
     }
 
-
-    async create(aCollection, aData) {
+async create(aCollection, aData) {
 
         try {
             await this.connect()
             let db = this.client.db("shop");
             const collection = db.collection(aCollection)
+            if (aData._id === undefined) {
+                delete aData._id; 
+            }
             console.log("this is data in repo", aData)
             const newCreate = await collection.insertOne(aData)
             return newCreate
@@ -93,11 +96,7 @@ class DatabaseConnection {
             console.error('Failed to delete product:', error);
             throw new Error('Failed to delete product');
         }
-    }
-
-
-
-
+    } 
 }
 
 module.exports = DatabaseConnection

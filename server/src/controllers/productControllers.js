@@ -4,12 +4,12 @@ const Product = require("../classes/Product")
 
 class ProductController {
     constructor() {
-        this.product = new Product()
     }
 
     getProducts = async (req, res) => {
         try {
-            const products = await this.product.getAll()
+            const product = new Product()
+            const products = await product.getAll()
             console.log("here are the products in controllers", products)
             res.status(200).json({ products });
         } catch (error) {
@@ -18,9 +18,11 @@ class ProductController {
     }
 
     createProduct = async (req, res) => {
+        const product = new Product()
         const productData = req.body
         try {
-            const newProduct = await this.product.create(productData);
+            product.setData(productData)
+            const newProduct = await product.save()
             console.log("this is the newly created product", newProduct)
             res.status(200).json({ newProduct })
         } catch (error) {
@@ -29,10 +31,13 @@ class ProductController {
     }
 
     editProduct = async (req, res) => {
+        const product = new Product()
         const productId = req.params.id
         const productData = req.body
         try {
-            const updatedProduct = await this.product.setObjectId(productId).edit(productData)
+            product.setObjectId(productId); 
+            product.setData(productData)
+            const updatedProduct = await product.save()
             if (updatedProduct.acknowledged && updatedProduct.modifiedCount > 0) {
                 res.status(200).json({ message: "Product updated successfully" });
             } else if (updatedProduct.matchedCount === 0) {
@@ -49,9 +54,11 @@ class ProductController {
 
     deleteProduct = async (req, res) => {
         const { productId } = req.body
+        const product = new Product()
         console.log(productId)
         try {
-            const deletionRes = await this.product.setObjectId(productId).delete()
+            product.setId(productId)
+            const deletionRes = await product.delete()
             if (deletionRes.acknowledged && deletionRes.deletedCount > 0) {
                 res.status(200).json({ message: "Product deleted successfully", details: deletionRes });
             } else if (deletionRes.acknowledged && deletionRes.deletedCount === 0) {

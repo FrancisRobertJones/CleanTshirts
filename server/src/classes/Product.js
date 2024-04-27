@@ -14,36 +14,31 @@ class Product extends DatabaseObject {
         this.collection = "products"
     }
 
+
+    setData(inputData) {
+        this._name = inputData.name,
+        this._price = inputData.price,
+        this._image1 = inputData.image1,
+        this._image2 = inputData.image2,
+        this._amountInStock = inputData.amountInStock,
+        this._description = inputData.description,
+        this._category = inputData.category
+    }
+
+
     getSaveData() {
+        let data = {
+            name: this._name,
+            price: this._price,
+            image1: this._image1,
+            image2: this._image2,
+            amountInStock: this._amountInStock,
+            description: this._description,
+            category: this._category,
+        }
+        console.log("data in product", data)
         return data
-    }
-
-    getEditData(inputData) {
-        return {
-            name: inputData.name,
-            price: inputData.price,
-            image1: inputData.image1,
-            image2: inputData.image2,
-            amountInStock: inputData.amountInStock,
-            description: inputData.description,
-            category: inputData.category,
-            
-        }
-    }
-
-    getCreateData(inputData) {
-        return {
-            name: inputData.name,
-            price: inputData.price,
-            image1: inputData.image1,
-            image2: inputData.image2,
-            amountInStock: inputData.amountInStock,
-            description: inputData.description,
-            category: inputData.category,
-            
-        }
-    }
-
+    } 
 }
 
 module.exports = Product
