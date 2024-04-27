@@ -1,6 +1,5 @@
 const DatabaseObject = require('./DatabaseObject')
 const ProductRepository = require('../repositories/productRepository')
-const DatabaseConnection = require('../repositories/productRepository')
 
 
 //note to self. buisiness logic, data validation, processes data. Calls a repository. NOT specifically useful in this case, but good to practise three tier architecture.
@@ -15,9 +14,34 @@ class Product extends DatabaseObject {
         this.collection = "products"
     }
 
-    getSaveData(){
-        let data = {}
+    getSaveData() {
         return data
+    }
+
+    getEditData(inputData) {
+        return {
+            name: inputData.name,
+            price: inputData.price,
+            image1: inputData.image1,
+            image2: inputData.image2,
+            amountInStock: inputData.amountInStock,
+            description: inputData.description,
+            category: inputData.category,
+            
+        }
+    }
+
+    getCreateData(inputData) {
+        return {
+            name: inputData.name,
+            price: inputData.price,
+            image1: inputData.image1,
+            image2: inputData.image2,
+            amountInStock: inputData.amountInStock,
+            description: inputData.description,
+            category: inputData.category,
+            
+        }
     }
 
 }

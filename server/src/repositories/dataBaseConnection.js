@@ -46,11 +46,12 @@ class DatabaseConnection {
 
 
     async create(aCollection, aData) {
+
         try {
             await this.connect()
             let db = this.client.db("shop");
             const collection = db.collection(aCollection)
-
+            console.log("this is data in repo", aData)
             const newCreate = await collection.insertOne(aData)
             return newCreate
         }

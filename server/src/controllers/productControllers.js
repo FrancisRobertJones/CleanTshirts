@@ -1,4 +1,3 @@
-const ProductService = require("../classes/Product");
 const Product = require("../classes/Product")
 
 //note to self. takes data provided by routes, and passes to services. 
@@ -21,8 +20,7 @@ class ProductController {
     createProduct = async (req, res) => {
         const productData = req.body
         try {
-            const newProduct = await this.productService.createProduct(productData);
-            //TODO deal with newProductID
+            const newProduct = await this.product.create(productData);
             console.log("this is the newly created product", newProduct)
             res.status(200).json({ newProduct })
         } catch (error) {
@@ -34,7 +32,7 @@ class ProductController {
         const productId = req.params.id
         const productData = req.body
         try {
-            const updatedProduct = await this.productService.editProduct(productId, productData)
+            const updatedProduct = await this.product.setObjectId(productId).edit(productData)
             if (updatedProduct.acknowledged && updatedProduct.modifiedCount > 0) {
                 res.status(200).json({ message: "Product updated successfully" });
             } else if (updatedProduct.matchedCount === 0) {
