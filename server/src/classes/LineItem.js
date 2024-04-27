@@ -1,47 +1,37 @@
 const DatabaseObject = require('./DatabaseObject')
-const ProductRepository = require('../repositories/productRepository')
 
 
-class LineItems extends DatabaseObject {
+class LineItem extends DatabaseObject {
     constructor() {
-        super();
+        super()
         this.collection = "lineItems"
     }
 
-    getAmount() {
-        return this.getData()["amount"];
+
+    setProduct(idString) {
+        this.productId = new mongodb.ObjectId(idString);
     }
 
-    getEditData(inputData) {
-        return {
-            quantity: inputData.quantity,            
+    setAmount(amount) {
+        this.amount = amount
+    }
+
+
+    setAmount() {
+        let data = {
+            name: this._name,
+            price: this._price,
+            image1: this._image1,
+            image2: this._image2,
+            amountInStock: this._amountInStock,
+            description: this._description,
+            category: this._category,
         }
+        console.log("data in product", data)
+        return data
     }
-
-    getCreateData(inputData) {
-        return {
-            productId: inputData.productId,
-            orderId: inputData.orderId,
-            quantity: inputData.quantity,
-            totalPrice: inputData.totalPrice,
-        }
-    }
-
-    calculateTotalPrice() {
-        
-    }
-
- 
-
-    //create line items
-
-    //delete line items
-
-    //edit line items
-
 }
 
 
 
-
-module.exports = LineItems;
+module.exports = LineItem;

@@ -1,9 +1,12 @@
+const LineItem = require("./LineItem")
+const DatabaseObject = require("./DatabaseObject")
 
-let ContainLineItems = class extends DatabaseObject {
+
+class ContainLineItems extends DatabaseObject {
     constructor(id) {
         super(id);
 
-        this.lineItems = []
+        this._lineItems = []
     }
 
     loadFromDatabase() {
@@ -14,12 +17,27 @@ let ContainLineItems = class extends DatabaseObject {
         }
     }
 
-    addLineItem() {
-//METODO
+    getLineItems() {
+        return this._lineItems
+    }
+
+    //add an existing
+    addLineItem(aLineItem) {
+        this._lineItems.push(aLineItem)
+    }
+
+    //create a new lineitem
+    async createLineItem(productId, amount) {
+        let lineItem = new LineItem
+        lineItem.setProduct(productId)
+        lineItem.setAmount(amount)
+        await lineItem.save()
+
+        this.addLineItem(linteItem)
     }
 
     removeLineItem() {
-//METODO
+//TODO
     }
 }
 

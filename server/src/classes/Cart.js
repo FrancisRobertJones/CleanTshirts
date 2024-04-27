@@ -1,9 +1,9 @@
-const DatabaseObject = require('./DatabaseObject')
+const ContainsLineItems = require("./ContainsLineItems")
 
-class Product extends DatabaseObject {
+class Cart extends ContainsLineItems {
     constructor() {
         super()
-        this.collection = "products"
+        this.collection = "cart"
     }
 
 
@@ -33,4 +33,4 @@ class Product extends DatabaseObject {
     } 
 }
 
-module.exports = Product
+module.exports = Cart
