@@ -1,7 +1,5 @@
 const Product = require("../classes/Product")
 
-//note to self. takes data provided by routes, and passes to services. 
-
 class ProductController {
     constructor() {
     }
@@ -21,9 +19,15 @@ class ProductController {
         const product = new Product()
         const productData = req.body
         try {
-            product.setData(productData)
+            product.setName(productData.name)
+            product.setPrice(productData.price)
+            product.setImage1(productData.image1)
+            product.setImage2(productData.image2)
+            product.setAmountInStock(productData.amountInStock)
+            product.setDescription(productData.description)
+            product.setCategory(productData.category)
+
             const insertResult = await product.save()
-            console.log("this is the newly created product", insertResult)
             res.status(200).json({ insertResult })
         } catch (error) {
             res.status(500).json({ "error": error })
@@ -35,10 +39,16 @@ class ProductController {
         const productId = req.params.id
         const productData = req.body
         try {
-            product.setObjectId(productId); 
-            product.setData(productData)
+            product.setObjectId(productId);
+            product.setName(productData.name)
+            product.setPrice(productData.price)
+            product.setImage1(productData.image1)
+            product.setImage2(productData.image2)
+            product.setAmountInStock(productData.amountInStock)
+            product.setDescription(productData.description)
+            product.setCategory(productData.category)
+
             const updateResult = await product.save()
-            console.log("CONTROLLER UPDATERESULT", updateResult)
             if (updateResult.acknowledged && updateResult.modifiedCount > 0) {
                 res.status(200).json({ message: "Product updated successfully" });
             } else if (updateResult.matchedCount === 0) {
@@ -50,8 +60,6 @@ class ProductController {
             res.status(500).json({ "error": error })
         }
     }
-
-
 
     deleteProduct = async (req, res) => {
         const { productId } = req.body
@@ -74,20 +82,3 @@ class ProductController {
 }
 
 module.exports = ProductController
-
-/* app.post("/create-order", async (request, response) => {
-    const orderId = await DatabaseConnection.getInstance().saveOrder(request.body.lineItems, request.body.customer)
-    response.send(200).json(orderId)
-})
-
-
-app.post("/create-product", async (request, response) => {
-    const product = request.body
-    if (product) {
-        response.status(200).json({"product added": product})
-        console.log("product added")
-        return
-    }
-    response.status(400).json("no product found")
-    console.log(product)
-}) */

@@ -73,6 +73,16 @@ class DatabaseConnection {
         }
     }
 
+    async getDocument(aCollection, aId) {
+        await this.connect()
+        let db = this.client.db("shop");
+        const collection = db.collection(aCollection)
+
+        let results = await collection.find({ "_id": aId }).toArray()
+        return results[0]
+
+    }
+
 
     async delete(aCollection, aId) {
         try {
@@ -89,6 +99,8 @@ class DatabaseConnection {
             throw new Error('Failed to delete product');
         }
     }
+
+
 }
 
 module.exports = DatabaseConnection

@@ -40,11 +40,24 @@ class DatabaseObject {
         return response
     }
 
+    async ensureHasId() {
+        if(!this.id){
+            this.id = await DatabaseConnection.getInstance().save(this.collection, this.id, {});
+        }
+    }
+
     getObjectId(id){
+        if(!id) {
+            return null
+        }
         if(id instanceof mongodb.ObjectId){
             return id
         }
         return new mongodb.ObjectId(id); 
+    }
+
+    async getDatabaseData() {
+        return await DatabaseConnection.getInstance().getDocument(this.collection, this.id);
     }
 }
 

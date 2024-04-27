@@ -6,17 +6,35 @@ class Product extends DatabaseObject {
         this.collection = "products"
     }
 
-
-    setData(inputData) {
-        this._name = inputData.name,
-        this._price = inputData.price,
-        this._image1 = inputData.image1,
-        this._image2 = inputData.image2,
-        this._amountInStock = inputData.amountInStock,
-        this._description = inputData.description,
-        this._category = inputData.category
+    setName(name){
+        this._name = name
+    }
+    setPrice(price){
+        this._price = price
+    }
+    setImage1(image1){
+        this._image1 = image1
+    }
+    setImage2(image2){
+        this._image2 = image2
+    }
+    setAmountInStock(amountInStock){
+        this._amountInStock = amountInStock
+    }
+    setDescription(description){
+        this._description = description  
+    }
+    setCategory(category){
+        this._category = category
     }
 
+    getName(){
+        return this._name
+    }
+
+    getPrice(){
+        return this._price
+    }
 
     getSaveData() {
         let data = {
@@ -30,7 +48,15 @@ class Product extends DatabaseObject {
         }
         console.log("data in product", data)
         return data
-    } 
+    }
+
+    async setupFromDatabase() {
+        let dataBaseData = await this.getDatabaseData()
+
+        this._name = dataBaseData["name"];
+        this._price = dataBaseData["price"]
+        return dataBaseData
+    }
 }
 
 module.exports = Product

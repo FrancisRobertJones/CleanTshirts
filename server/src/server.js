@@ -4,6 +4,7 @@ const DatabaseConnection = require('./repositories/dataBaseConnection')
 const bodyParser = require('body-parser')
 const productsRouter = require('./routes/productRoutes')
 const authRouter = require('./routes/authRoutes')
+const orderRouter = require('./routes/orderRoutes')
 const cors = require('cors')
 
 let app = express()
@@ -19,6 +20,7 @@ app.use(cors())
 
 
 app.use("/products", productsRouter)
+app.use("/orders", orderRouter)
 app.use("/auth", authRouter)
 
 

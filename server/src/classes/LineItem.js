@@ -1,4 +1,5 @@
 const DatabaseObject = require('./DatabaseObject')
+const Product = require('./Product')
 const mongodb = require('mongodb')
 
 
@@ -20,19 +21,29 @@ class LineItem extends DatabaseObject {
         this.amount = amount
     }
 
-    getSaveData(){
-        let data = {}
-        if(this.orderId){
-            data["order"] = this.orderId
-        }
-        if(this.productId){
-            data["product"] = this.productId
-        }
-        if(this.amount){
-            data["amount"] = this.amount
-        }
+    async calculateTotalPrice() {
+        let product = new Product()
+        product.setId(this.productId)
+        await product.setupFromDatabase() // TODO fix later 
+
+        const productPrice = product.getPrice() // TODO fix this function
+        this.totalPrice = this.amount * productPrice
     }
 
+    getSaveData() {
+        let data = {}
+        if (this.orderId) {
+            data["order"] = this.orderId
+        }
+        if (this.productId) {
+            data["product"] = this.productId
+        }
+        if (this.amount) {
+            data["amount"] = this.amount
+        }
+        return data
+    }
+/*  */
 }
 
 

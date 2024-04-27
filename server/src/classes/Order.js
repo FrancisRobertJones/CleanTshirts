@@ -17,7 +17,12 @@ class Order extends ContainsLineItems {
         if(this._status) {
             data["status"]= this._status
         }
-        //TODO COMPLETE
+        if(this._totalPrice) {
+            data["totalPrice"] = this._totalPrice
+        }
+    }
+    
+
     }
 
 
@@ -35,6 +40,6 @@ class Order extends ContainsLineItems {
     "unpaid"
     
      */
-}
+
 
 module.exports = Order
