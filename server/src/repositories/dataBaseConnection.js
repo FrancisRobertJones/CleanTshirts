@@ -42,45 +42,37 @@ class DatabaseConnection {
         }
         console.log(returnArray)
         return returnArray
-        
+
     }
 
-async create(aCollection, aData) {
-
+    async save(aCollection, aId, aData) {
         try {
             await this.connect()
             let db = this.client.db("shop");
             const collection = db.collection(aCollection)
-            if (aData._id === undefined) {
-                delete aData._id; 
+            if (aId) {
+                console.log("im editing", aData, aId)
+                const updateResult = await collection.updateOne({ "_id": new mongodb.ObjectId(aId) }, {
+                    "$set": {
+                        ...aData
+                    }
+                })
+                return await updateResult
+
+            } else {
+                console.log("im creating", aData, aId)
+                const insertResult = await collection.insertOne(aData)
+                console.log(insertResult)
+
+                return insertResult
             }
-            console.log("this is data in repo", aData)
-            const newCreate = await collection.insertOne(aData)
-            return newCreate
         }
         catch (error) {
-            console.error('Failed to create', error);
-            throw new Error('Failed to create');
+            console.error('Failed to save:', error);
+            throw new Error('Failed to save ' + error.message);
         }
     }
 
-    async edit(aCollection, aId, aData) {
-        try {
-            await this.connect()
-            let db = this.client.db("shop");
-            const collection = db.collection(aCollection)
-            const editedItem = await collection.updateOne({ "_id": new mongodb.ObjectId(aId) }, {
-                "$set": {
-                    ...aData
-                }
-            })
-            return editedItem
-        }
-        catch (error) {
-            console.error('Failed to edit:', error);
-            throw new Error('Failed to edit product');
-        }
-    }
 
     async delete(aCollection, aId) {
         try {
@@ -96,7 +88,7 @@ async create(aCollection, aData) {
             console.error('Failed to delete product:', error);
             throw new Error('Failed to delete product');
         }
-    } 
+    }
 }
 
 module.exports = DatabaseConnection

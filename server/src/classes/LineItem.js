@@ -1,4 +1,5 @@
 const DatabaseObject = require('./DatabaseObject')
+const mongodb = require('mongodb')
 
 
 class LineItem extends DatabaseObject {
@@ -7,29 +8,31 @@ class LineItem extends DatabaseObject {
         this.collection = "lineItems"
     }
 
+    setOrder(id) {
+        this.orderId = this.getObjectId(id)
+    }
 
-    setProduct(idString) {
-        this.productId = new mongodb.ObjectId(idString);
+    setProduct(id) {
+        this.productId = this.getObjectId(id)
     }
 
     setAmount(amount) {
         this.amount = amount
     }
 
-
-    setAmount() {
-        let data = {
-            name: this._name,
-            price: this._price,
-            image1: this._image1,
-            image2: this._image2,
-            amountInStock: this._amountInStock,
-            description: this._description,
-            category: this._category,
+    getSaveData(){
+        let data = {}
+        if(this.orderId){
+            data["order"] = this.orderId
         }
-        console.log("data in product", data)
-        return data
+        if(this.productId){
+            data["product"] = this.productId
+        }
+        if(this.amount){
+            data["amount"] = this.amount
+        }
     }
+
 }
 
 

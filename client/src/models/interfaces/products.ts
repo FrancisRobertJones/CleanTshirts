@@ -15,7 +15,7 @@ export interface IProduct {
 }
 
 export interface ICreateProductRes {
-    newProduct: {
+    insertResult: {
         acknowledged: boolean,
         insertedId: string
     } 

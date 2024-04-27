@@ -22,9 +22,9 @@ class ProductController {
         const productData = req.body
         try {
             product.setData(productData)
-            const newProduct = await product.save()
-            console.log("this is the newly created product", newProduct)
-            res.status(200).json({ newProduct })
+            const insertResult = await product.save()
+            console.log("this is the newly created product", insertResult)
+            res.status(200).json({ insertResult })
         } catch (error) {
             res.status(500).json({ "error": error })
         }
@@ -37,10 +37,11 @@ class ProductController {
         try {
             product.setObjectId(productId); 
             product.setData(productData)
-            const updatedProduct = await product.save()
-            if (updatedProduct.acknowledged && updatedProduct.modifiedCount > 0) {
+            const updateResult = await product.save()
+            console.log("CONTROLLER UPDATERESULT", updateResult)
+            if (updateResult.acknowledged && updateResult.modifiedCount > 0) {
                 res.status(200).json({ message: "Product updated successfully" });
-            } else if (updatedProduct.matchedCount === 0) {
+            } else if (updateResult.matchedCount === 0) {
                 res.status(404).json({ message: "No product found with provided ID" });
             } else {
                 res.status(200).json({ message: "No changes made to the product" });

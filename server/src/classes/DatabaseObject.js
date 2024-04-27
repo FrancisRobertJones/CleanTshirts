@@ -23,13 +23,10 @@ class DatabaseObject {
         return {}
     }
 
-    save() {
+    async save() {
         const data = this.getSaveData()
-        if (this.id) {
-            return DatabaseConnection.getInstance().edit(this.collection, this.id, data);
-        } else {
-            return DatabaseConnection.getInstance().create(this.collection, data);
-        }
+        return await DatabaseConnection.getInstance().save(this.collection, this.id, data);
+
     }
 
     getAll() {
@@ -41,6 +38,13 @@ class DatabaseObject {
     delete() {
         const response = DatabaseConnection.getInstance().delete(this.collection, this.id)
         return response
+    }
+
+    getObjectId(id){
+        if(id instanceof mongodb.ObjectId){
+            return id
+        }
+        return new mongodb.ObjectId(id); 
     }
 }
 

@@ -60,11 +60,12 @@ const AddProductComp = ({ fetchAllProducts }: IAddProductCompProps) => {
         try {
 
             const res = await axios.post<ICreateProductRes>("http://localhost:3000/products/create", newProduct)
+            console.log(res)
 
-            if (res.data.newProduct.acknowledged) {
+            if (res.data.insertResult.acknowledged) {
                 toast({
                     title: "New product created",
-                    description: `Id number ${res.data.newProduct.insertedId}`,
+                    description: `Id number ${res.data.insertResult.insertedId}`,
                 })
                 fetchAllProducts()
             } else {

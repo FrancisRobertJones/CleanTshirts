@@ -28,9 +28,12 @@ class ContainLineItems extends DatabaseObject {
 
     //create a new lineitem
     async createLineItem(productId, amount) {
-        let lineItem = new LineItem
+        let lineItem = new LineItem()
+
+        lineItem.setOrder(this.id)
         lineItem.setProduct(productId)
         lineItem.setAmount(amount)
+        
         await lineItem.save()
 
         this.addLineItem(linteItem)
