@@ -17,9 +17,14 @@ import { CartActionType } from "./reducers/cartReducer"
 import { IProduct } from "@/models/interfaces/products"
 import { toast } from "./ui/use-toast"
 import { AuthContext } from "@/context/authContext"
+import { AuthActionType } from "@/reducers/authReducer"
+import { Link } from "react-router-dom";
+
 
 
 export function Navbar() {
+
+
 
     const { cartItems, dispatchCart } = React.useContext(CartContext)
     const [cartTotal, setCartTotal] = React.useState(0)
@@ -43,7 +48,7 @@ export function Navbar() {
 
     }, [cartItems])
 
-    const { authedUser } = React.useContext(AuthContext)
+    const { authedUser, logOut } = React.useContext(AuthContext)
 
     return (
         <>
@@ -61,7 +66,7 @@ export function Navbar() {
                                         >
                                             <Icons.logo className="h-6 w-6" />
                                             <div className="mb-2 mt-4 text-lg font-medium">
-                                                {`home ${authedUser.User?.email}`}
+                                                {authedUser.User ? `Welcome back ${authedUser.User.email}` : 'Home'} 
                                             </div>
                                             <p className="text-sm leading-tight text-muted-foreground">
                                                 See our beautifully designed T-Shirts with environment and sustainability in mind. Good prices and scandinavian design.
@@ -108,13 +113,16 @@ export function Navbar() {
                             </ul>
                         </NavigationMenuContent>
                     </NavigationMenuItem>
-                </NavigationMenuList>
-                <NavigationMenuList>
-                            //TODO FIX LOGOUT
-                    <Button /* onClick={() =>  LOGOUT } */ className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Logout</Button>
-                </NavigationMenuList>
 
-            </NavigationMenu>
+                </NavigationMenuList>
+                <div className="ml-24">
+                    {authedUser.loggedIn ? <Button onClick={() => logOut()} className="mb-1 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Logout</Button>
+                        :
+                        <Link to={"/auth"}><Button className="mb-1 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Login</Button></Link>
+                    }
+                </div>
+            </NavigationMenu >
+            
             <Separator />
         </>
     )

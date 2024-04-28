@@ -18,15 +18,19 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import { AccountCreation, AuthCredentials, PasswordCheck } from '@/models/classes/customer'
-import PasswordWarning from '@/components/passwordWarning'
+import PasswordWarning from '@/components/passwordWarningComp'
 import axios, { AxiosError } from 'axios'
 import { toast } from '@/components/ui/use-toast'
 import { AuthContext } from '@/context/authContext'
+import { useNavigate } from 'react-router'
 
 const Authpage = () => {
     const [newCustomer, setNewCustomer] = useState<AccountCreation>(new AccountCreation("", "", "", "", "", ""))
     const [passwords, setPasswords] = useState<PasswordCheck>(new PasswordCheck("", "", true))
     const [authCredentials, setAuthCredentials] = useState<AuthCredentials>(new AuthCredentials("", ""))
+    const { checkAuth, authedUser } = useContext(AuthContext)
+    const navigate = useNavigate()
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewCustomer({ ...newCustomer, [e.target.name]: e.target.value })
@@ -36,7 +40,8 @@ const Authpage = () => {
         setPasswords({ ...passwords, [e.target.name]: e.target.value })
     }
 
-    const { checkAuth } = useContext(AuthContext)
+
+
 
     useEffect(() => {
         const handleCheckPasswordMatches = () => {
@@ -97,10 +102,11 @@ const Authpage = () => {
             checkAuth()
             toast({
                 title: "You are logged in!",
-                description: "You have been logged in, enjoy shopping!",
+                description: "Enjoy your shopping!",
             })
             console.log(res)
             setAuthCredentials(new AuthCredentials("", ""))
+            navigate("/")
 
         } catch (error) {
             //TODO catch error when username is incorrect, currently only throwing correct error when password is incorrect.

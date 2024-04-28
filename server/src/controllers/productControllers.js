@@ -8,7 +8,16 @@ class ProductController {
         try {
             const product = new Product()
             const products = await product.getAll()
-            console.log("here are the products in controllers", products)
+            res.status(200).json({ products });
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+
+    getActiveProducts = async (req,res) => {
+        try {
+            const product = new Product()
+            const products = await product.getAllActive()
             res.status(200).json({ products });
         } catch (error) {
             res.status(500).send(error.message);
@@ -26,6 +35,8 @@ class ProductController {
             product.setAmountInStock(productData.amountInStock)
             product.setDescription(productData.description)
             product.setCategory(productData.category)
+            product.setStatus(productData.status)
+
 
             const insertResult = await product.save()
             res.status(200).json({ insertResult })
@@ -47,6 +58,7 @@ class ProductController {
             product.setAmountInStock(productData.amountInStock)
             product.setDescription(productData.description)
             product.setCategory(productData.category)
+            product.setStatus(productData.status)
 
             const updateResult = await product.save()
             if (updateResult.acknowledged && updateResult.modifiedCount > 0) {

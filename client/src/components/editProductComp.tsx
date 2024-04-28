@@ -42,10 +42,14 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
 
   }
 
-  const handleAvailableToggle = (newState: boolean) => {
+/*   const handleAvailableToggle = (newState: boolean) => {
     setIsAvailable(newState);
     setNewProduct({ ...newProduct, status: newState })
+  } */
 
+  const handleAvailableToggle = (newState: boolean) => {
+    setIsAvailable(newState);
+    setNewProduct(prev => ({ ...prev, status: newState }));
   }
 
   const handleCategoryChange = (value: string) => {
@@ -87,11 +91,10 @@ export function EditProduct({ product, fetchAllProducts }: IEditProductProps) {
     }
   }
 
-  //TODO handle different data types, number etc. 
+
 
   const handleEditSubmit = async () => {
     try {
-      setNewProduct({ ...newProduct, status: isAvailable })
 
       const res = await axios.put(`http://localhost:3000/products/update/${product._id}`, newProduct)
       console.log("res from edit", res.data)

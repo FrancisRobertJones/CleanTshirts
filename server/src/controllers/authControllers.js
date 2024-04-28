@@ -64,6 +64,7 @@ class AuthController {
     }
 
     authCheck = async (req, res) => {
+        console.log(">>>>>>>>>>>> checking")
         if (req.session && req.session.user) {
             res.status(200).json({ isAuthenticated: true, user: req.session.user });
         } else {

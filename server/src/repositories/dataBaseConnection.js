@@ -45,6 +45,15 @@ class DatabaseConnection {
 
     }
 
+    async getAllActive(aCollection) {
+        await this.connect();
+        let db = this.client.db("shop");
+        const collection = db.collection(aCollection)
+        let activeArray = await collection.find({"status": true}).toArray()
+        console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<", activeArray)
+        return activeArray
+    }
+
     async save(aCollection, aId, aData) {
         try {
             await this.connect()

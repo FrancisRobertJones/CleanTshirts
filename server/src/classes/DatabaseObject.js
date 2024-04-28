@@ -34,6 +34,11 @@ class DatabaseObject {
         return resData
     }
 
+    getAllActive(){
+        const resData = DatabaseConnection.getInstance().getAllActive(this.collection)
+        return resData
+    }
+
 
     delete() {
         const response = DatabaseConnection.getInstance().delete(this.collection, this.id)

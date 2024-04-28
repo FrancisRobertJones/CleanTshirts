@@ -10,7 +10,8 @@ const AdminPage = () => {
   const [allProducts, setAllProducts] = useState<IProduct[]>([])
 
   const fetchAllProducts = async () => {
-    const response = await axios.get<IAllProductsResponse>("http://localhost:3000/products/")
+    const response = await axios.get<IAllProductsResponse>("http://localhost:3000/products/allproducts")
+    console.log(response)
     setAllProducts(response.data.products)
   }
 

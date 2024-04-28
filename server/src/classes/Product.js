@@ -28,6 +28,10 @@ class Product extends DatabaseObject {
         this._category = category
     }
 
+    setStatus(status){
+        this._status = status
+    }
+
     getName(){
         return this._name
     }
@@ -45,6 +49,7 @@ class Product extends DatabaseObject {
             amountInStock: this._amountInStock,
             description: this._description,
             category: this._category,
+            status: this._status
         }
         console.log("data in product", data)
         return data
