@@ -24,17 +24,50 @@ class AuthController {
 
     logIn = async (req, res) => {
         try {
-            const userData = req.body
-            const authSuccess = await this.authService.signIn(userData)
-            authSuccess ? res.status(200).json({ success: "user has been authed" }) : res.status(401).json({ denied: "incorrect credentials"})
+            const userCredentials = req.body
+            const authSuccess = await this.authService.signIn(userCredentials)
+            if (authSuccess) { 
+                const userDetails = await this.authService.getUserDetails(userCredentials.email);
+
+                req.session.user = { 
+                    email: userDetails._id,
+                    address: userDetails.address,
+                    state: userDetails.state,
+                    country: userDetails.country,
+                    postcode: userDetails.postcode
+                 }
+                res.status(200).json({ success: "user has been authed" }) 
+            } 
+            else { 
+                res.status(401).json({ denied: "incorrect credentials" }) 
+            }
         } catch (error) {
             if (error.message === "User doesn't exist") {
                 res.status(409).json({ message: error })
                 console.log("User doesn't exist")
             } else {
                 console.log("unknown auth error at controller level", error)
-                res.status(400).json({ "problem logging in user ":  error })
+                res.status(400).json({ "problem logging in user ": error })
             }
+        }
+    }
+
+    logout = async (req, res) => {
+        try {
+            req.session.destroy(() => {
+                res.status(200).json({ message: "Successfully logged out" });
+            });
+        } catch(error) {
+            console.log("Problem logging out: ", error);
+            res.status(500).json({ error: "Failed to log out" });
+        }
+    }
+
+    authCheck = async (req, res) => {
+        if (req.session && req.session.user) {
+            res.status(200).json({ isAuthenticated: true, user: req.session.user });
+        } else {
+            res.status(401).json({ isAuthenticated: false });
         }
     }
 }

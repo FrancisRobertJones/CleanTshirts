@@ -16,6 +16,7 @@ import { CartContext } from "@/context/cartContext"
 import { CartActionType } from "./reducers/cartReducer"
 import { IProduct } from "@/models/interfaces/products"
 import { toast } from "./ui/use-toast"
+import { AuthContext } from "@/context/authContext"
 
 
 export function Navbar() {
@@ -42,6 +43,8 @@ export function Navbar() {
 
     }, [cartItems])
 
+    const { authedUser } = React.useContext(AuthContext)
+
     return (
         <>
             <NavigationMenu>
@@ -58,7 +61,7 @@ export function Navbar() {
                                         >
                                             <Icons.logo className="h-6 w-6" />
                                             <div className="mb-2 mt-4 text-lg font-medium">
-                                                home
+                                                {`home ${authedUser.User?.email}`}
                                             </div>
                                             <p className="text-sm leading-tight text-muted-foreground">
                                                 See our beautifully designed T-Shirts with environment and sustainability in mind. Good prices and scandinavian design.
@@ -106,6 +109,11 @@ export function Navbar() {
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                 </NavigationMenuList>
+                <NavigationMenuList>
+                            //TODO FIX LOGOUT
+                    <Button /* onClick={() =>  LOGOUT } */ className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Logout</Button>
+                </NavigationMenuList>
+
             </NavigationMenu>
             <Separator />
         </>

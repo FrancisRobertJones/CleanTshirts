@@ -44,12 +44,8 @@ class AuthService {
                 const unhashedPass = userData["password"]
 
                 const authSuccess = await bcrypt.compare(unhashedPass, hashedPass)
-                console.log(authSuccess)
-
-
                 return authSuccess
 
-                //TODO start a session
             } catch (error) {
                 console.log("there has been an error logging the user in", error)
                 throw new Error("Problem logging in")
@@ -57,18 +53,13 @@ class AuthService {
         } 
     }
 
-    async hashAndCompare() {
-        // Simulate storing and retrieving hash
-        const password = "testPassword123";
-        const hash = await bcrypt.hash(password, 10);
-        console.log("Stored hash:", hash);
-    
-        // Simulate retrieval and comparison
-        const retrievedHash = hash; // This should be the same as 'hash'
-        const comparisonResult = await bcrypt.compare(password, retrievedHash);
-        console.log("Comparison result:", comparisonResult); // Should log: true
+    async getUserDetails(email) {
+        const user = await this.authRepository.findUser(email);
+        if (!user) {
+            throw new Error("User not found");
+        }
+        return user; 
     }
-
     
 }
 

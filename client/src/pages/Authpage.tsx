@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -21,6 +21,7 @@ import { AccountCreation, AuthCredentials, PasswordCheck } from '@/models/classe
 import PasswordWarning from '@/components/passwordWarning'
 import axios, { AxiosError } from 'axios'
 import { toast } from '@/components/ui/use-toast'
+import { AuthContext } from '@/context/authContext'
 
 const Authpage = () => {
     const [newCustomer, setNewCustomer] = useState<AccountCreation>(new AccountCreation("", "", "", "", "", ""))
@@ -34,6 +35,8 @@ const Authpage = () => {
     const handlePassWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPasswords({ ...passwords, [e.target.name]: e.target.value })
     }
+
+    const { checkAuth } = useContext(AuthContext)
 
     useEffect(() => {
         const handleCheckPasswordMatches = () => {
@@ -49,39 +52,39 @@ const Authpage = () => {
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        if (passwords.matches && newCustomer.address && newCustomer.country && newCustomer.email && newCustomer.postcode && newCustomer.state){
+        if (passwords.matches && newCustomer.address && newCustomer.country && newCustomer.email && newCustomer.postcode && newCustomer.state) {
             const customerData = {
                 ...newCustomer,
                 password: passwords.password1
             }
-        try {
-            const res = await axios.post("http://localhost:3000/auth/create", customerData)
-            console.log(newCustomer.password)
-            toast({
-                title: "Account created!",
-                description: "Please log in to continue"
-            })
-            console.log(res)
-            setNewCustomer(new AccountCreation("", "", "", "", "", ""))
-            setPasswords(new PasswordCheck("", "", false))
-        } catch (error) {
+            try {
+                const res = await axios.post("http://localhost:3000/auth/create", customerData)
+                console.log(newCustomer.password)
+                toast({
+                    title: "Account created!",
+                    description: "Please log in to continue"
+                })
+                console.log(res)
+                setNewCustomer(new AccountCreation("", "", "", "", "", ""))
+                setPasswords(new PasswordCheck("", "", false))
+            } catch (error) {
 
-            if (axios.isAxiosError(error) && error.response?.status === 409) {
-                toast({
-                    variant: "destructive",
-                    title: "Uh oh! Something went wrong.",
-                    description: "An account with this email already exists!",
-                })
-            } else {
-                toast({
-                    variant: "destructive",
-                    title: "Uh oh! Something went wrong.",
-                    description: "An unknown error occured during account creation!",
-                })
+                if (axios.isAxiosError(error) && error.response?.status === 409) {
+                    toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: "An account with this email already exists!",
+                    })
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: "An unknown error occured during account creation!",
+                    })
+                }
+                console.log(error)
             }
-            console.log(error)
         }
-}
     }
 
     const handleAuthOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +93,8 @@ const Authpage = () => {
 
     const handleLogin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         try {
-            const res = await axios.post("http://localhost:3000/auth/login", authCredentials)
+            const res = await axios.post("http://localhost:3000/auth/login", authCredentials, { withCredentials: true })
+            checkAuth()
             toast({
                 title: "You are logged in!",
                 description: "You have been logged in, enjoy shopping!",
