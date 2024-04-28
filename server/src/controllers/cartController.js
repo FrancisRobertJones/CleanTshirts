@@ -4,6 +4,16 @@ class CartController {
     constructor() {
     }
 
+     getCart = async (req,res) => {
+        try {
+            const cart = new Cart()
+            const cartItems = await cart.loadFromDatabase()
+            res.status(200).json({ cartItems });
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    } 
+
     addToCart = async (req, res) => {
         const { productId, quantity } = req.body
         const cart = new Cart()

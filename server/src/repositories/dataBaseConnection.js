@@ -1,5 +1,7 @@
 const mongodb = require("mongodb");
 const { LineItemsDb } = require("../models/lineItemsDb");
+const ordersPipeline = require("../pipelines/orderPipeline")
+const cartPipeline = require("../pipelines/cartPipeline")
 
 let instance = null;
 
@@ -34,7 +36,12 @@ class DatabaseConnection {
         await this.connect();
         let db = this.client.db("shop");
         const collection = db.collection(aCollection)
-        let pipeline = [];
+        let pipeline = []
+        if (aCollection === "orders") {
+            pipeline = ordersPipeline;
+        } else if (aCollection === "cart") {
+            pipeline = cartPipeline;
+        }
         let documents = collection.aggregate(pipeline);
         let returnArray = [];
         for await (const document of documents) {
@@ -42,14 +49,15 @@ class DatabaseConnection {
         }
         console.log(returnArray)
         return returnArray
-
     }
+
+
 
     async getAllActive(aCollection) {
         await this.connect();
         let db = this.client.db("shop");
         const collection = db.collection(aCollection)
-        let activeArray = await collection.find({"status": true}).toArray()
+        let activeArray = await collection.find({ "status": true }).toArray()
         console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<", activeArray)
         return activeArray
     }
@@ -90,6 +98,20 @@ class DatabaseConnection {
         let results = await collection.find({ "_id": aId }).toArray()
         return results[0]
 
+    }
+
+    async loadFromDatabase(aCollection, userId) {
+        try {
+            await this.connect()
+            let db = this.client.db("shop");
+            const collection = db.collection(aCollection)
+            const result = await collection.findOne({ "userId": (userId) });
+            return result
+        }
+        catch (error) {
+            console.error('failed to load:', error);
+            throw new Error('failed to load');
+        }
     }
 
 

@@ -34,6 +34,7 @@ class DatabaseObject {
         return resData
     }
 
+
     getAllActive(){
         const resData = DatabaseConnection.getInstance().getAllActive(this.collection)
         return resData
@@ -64,6 +65,10 @@ class DatabaseObject {
 
     async getDatabaseData() {
         return await DatabaseConnection.getInstance().getDocument(this.collection, this.id);
+    }
+
+    async loadFromDatabase() {
+        return await DatabaseConnection.getInstance().loadFromDatabase(this.collection, this.id)
     }
 }
 
