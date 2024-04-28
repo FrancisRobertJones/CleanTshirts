@@ -49,13 +49,14 @@ const Authpage = () => {
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        if (passwords.matches && newCustomer.address && newCustomer.country && newCustomer.email && newCustomer.postcode && newCustomer.state) {
-            setNewCustomer({ ...newCustomer, password: passwords.password1 })
-        }
-
-        //TODO fix backend and start auth process.
+        if (passwords.matches && newCustomer.address && newCustomer.country && newCustomer.email && newCustomer.postcode && newCustomer.state){
+            const customerData = {
+                ...newCustomer,
+                password: passwords.password1
+            }
         try {
-            const res = await axios.post("http://localhost:3000/auth/create", newCustomer)
+            const res = await axios.post("http://localhost:3000/auth/create", customerData)
+            console.log(newCustomer.password)
             toast({
                 title: "Account created!",
                 description: "Please log in to continue"
@@ -80,7 +81,7 @@ const Authpage = () => {
             }
             console.log(error)
         }
-
+}
     }
 
     const handleAuthOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {

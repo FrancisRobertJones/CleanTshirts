@@ -26,18 +26,17 @@ class AuthController {
         try {
             const userData = req.body
             const authSuccess = await this.authService.signIn(userData)
-            authSuccess ? res.status(200).json({ success: "user has been authed" }) : res.status(400).json({ denied: "incorrect credentials"})
+            authSuccess ? res.status(200).json({ success: "user has been authed" }) : res.status(401).json({ denied: "incorrect credentials"})
         } catch (error) {
             if (error.message === "User doesn't exist") {
                 res.status(409).json({ message: error })
                 console.log("User doesn't exist")
             } else {
                 console.log("unknown auth error at controller level", error)
-                res.status(400).json({ "problem creating user ":  error })
+                res.status(400).json({ "problem logging in user ":  error })
             }
         }
     }
-
 }
 
 

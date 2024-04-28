@@ -41,19 +41,20 @@ class DatabaseObject {
     }
 
     async ensureHasId() {
-        if(!this.id){
-            this.id = await DatabaseConnection.getInstance().save(this.collection, this.id, {});
+        if (!this.id) {
+            const newDocument = await DatabaseConnection.getInstance().save(this.collection, null, {});
+            this.id = newDocument.insertedId
         }
     }
 
-    getObjectId(id){
-        if(!id) {
+    getObjectId(id) {
+        if (!id) {
             return null
         }
-        if(id instanceof mongodb.ObjectId){
+        if (id instanceof mongodb.ObjectId) {
             return id
         }
-        return new mongodb.ObjectId(id); 
+        return new mongodb.ObjectId(id);
     }
 
     async getDatabaseData() {

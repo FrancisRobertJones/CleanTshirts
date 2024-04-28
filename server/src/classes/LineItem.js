@@ -17,8 +17,8 @@ class LineItem extends DatabaseObject {
         this.productId = this.getObjectId(id)
     }
 
-    setAmount(amount) {
-        this.amount = amount
+    setQuantity(quantity) {
+        this.quantity = quantity
     }
 
     async calculateTotalPrice() {
@@ -27,7 +27,7 @@ class LineItem extends DatabaseObject {
         await product.setupFromDatabase() // TODO fix later 
 
         const productPrice = product.getPrice() // TODO fix this function
-        this.totalPrice = this.amount * productPrice
+        this.totalPrice = this.quantity * productPrice
     }
 
     getSaveData() {
@@ -38,8 +38,8 @@ class LineItem extends DatabaseObject {
         if (this.productId) {
             data["product"] = this.productId
         }
-        if (this.amount) {
-            data["amount"] = this.amount
+        if (this.quantity) {
+            data["quantity"] = this.quantity
         }
         return data
     }
