@@ -21,14 +21,22 @@ class AuthService {
                 const passHashed = await bcrypt.hash(passUnhashed, saltRounds)
                 const userDataHashed = { ...userData, password: passHashed }
                 const newUser = await this.authRepository.createUser(userDataHashed)
+                await this.createCartForUser(newUser.insertedId)
                 return newUser
             } catch (error) {
                 console.log("there has been an error creating the user", error)
                 throw new Error("Problem creating user", error)
             }
         }
-
     }
+
+/*  figure this out   async createCartForUser(userId) {
+        const cartData = {
+            userId: userId,
+            lineItems: []
+        }
+        return await this.cartRepository.createCart(cartData)
+    } */
 
     async signIn(userData) {
        const { email } = userData

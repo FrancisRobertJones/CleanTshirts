@@ -1,7 +1,6 @@
 const mongodb = require("mongodb");
 const { LineItemsDb } = require("../models/lineItemsDb");
 const ordersPipeline = require("../pipelines/orderPipeline")
-const cartPipeline = require("../pipelines/cartPipeline")
 
 let instance = null;
 
@@ -104,41 +103,44 @@ class DatabaseConnection {
             await this.connect()
             let db = this.client.db("shop");
             const collection = db.collection(aCollection)
-            let pipeline = []
+            let pipeline = [
+                { $match: { userId: id } }
+            ];
             if (aCollection === "cart") {
-                pipeline = [
-                    { $match: { userId: id } },
-                      {
+                pipeline.push(
+                    {
                         $lookup: {
-                          from: "lineItems",
-                          localField: "lineItemIds",
-                          foreignField: "_id",
-                          as: "lineItems",
-                          pipeline: [
-                            {
-                              $lookup: {
-                                from: "products",
-                                localField: "product",
-                                foreignField: "_id",
-                                as: "productDetails"
-                              }
-                            },
-                          ]
+                            from: "lineItems",
+                            localField: "lineItemIds",
+                            foreignField: "_id",
+                            as: "lineItems",
+                            pipeline: [
+                                {
+                                    $lookup: {
+                                        from: "products",
+                                        localField: "product",
+                                        foreignField: "_id",
+                                        as: "productDetails"
+                                    }
+                                },
+                            ]
                         }
-                      },
-                      {
+                    },
+                    {
                         $addFields: {
-                          totalCartValue: {
-                            $sum: "$lineItems.totalPrice" 
-                          }
+                            totalCartValue: {
+                                $sum: "$lineItems.totalPrice"
+                            }
                         }
-                      }
-                    ];
+                    }
+                )
             }
-            const documents = await collection.aggregate(pipeline).toArray();
-            console.log(documents);
-            return documents
-
+            const result = await collection.aggregate(pipeline).toArray();
+            if (result.length > 0) {
+                return result[0]
+            } else {
+                return null
+            }
         }
         catch (error) {
             console.error('failed to load:', error);

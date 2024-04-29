@@ -25,29 +25,31 @@ class Cart extends ContainsLineItems {
         return order
     }
 
+
     async loadCartForUser() {
         try {
-            const result = await this.loadFromDatabase(this.collection, this.userId)
-            if (result) {
-                this._lineItems = result.lineItems || [];
-                console.log("Cart loaded:", result);
-            } else {
-                console.log("No cart found for user:", this.userId);
-            }
-            return result;
+            let cart = await this.loadFromDatabase(this.collection, this.userId)
+            console.log("Cart loaded for user:", this.userId);
+            return cart;
         } catch (error) {
-            console.log("Error in loadCartForUser:", error)
+            console.error("Error loading or creating cart:", error)
             throw error
         }
     }
 
-    getSaveData() {
-        let data = {}
 
-        if (this._totalPrice) {
-            data["totalPrice"] = this._totalPrice
-        }
+    getSaveData() {
+        let data = {
+            userId: this.userId,
+            lineItems: this._lineItems.map(lineItem => lineItem.getSaveData()),
+/* TODO NOT PRIO
+            totalCartValue: this.calculateTotalCartValue(),  
+ */        };
+
+        console.log("Data to be saved for cart:", data);
+        return data;
     }
+
 }
 
 module.exports = Cart

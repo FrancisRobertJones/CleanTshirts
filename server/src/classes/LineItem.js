@@ -13,23 +13,31 @@ class LineItem extends DatabaseObject {
         this.orderId = this.getObjectId(id)
     }
 
-    setProduct(id) {
-        this.productId = this.getObjectId(id)
+    setProduct(productId) {
+        this.productId = this.getObjectId(productId)
     }
 
     setQuantity(quantity) {
         this.quantity = quantity
     }
 
-    async calculateTotalPrice() {
-        let product = new Product()
-        product.setId(this.productId)
-        await product.setupFromDatabase() // TODO fix later 
-
-        const productPrice = product.getPrice() // TODO fix this function
-        this.totalPrice = this.quantity * productPrice
+    getSaveData() {
+            let data = {
+                productId: this.productId,
+                quantity: this.quantity,
+            }
+            return data
     }
 
+    /*     async calculateTotalPrice() {
+            let product = new Product()
+            product.setId(this.productId)
+            await product.setupFromDatabase() // TODO fix later 
+    
+            const productPrice = product.getPrice() // TODO fix this function
+            this.totalPrice = this.quantity * productPrice
+        }
+     */
     getSaveData() {
         let data = {}
         if (this.orderId) {
@@ -43,7 +51,7 @@ class LineItem extends DatabaseObject {
         }
         return data
     }
-/*  */
+    /*  */
 }
 
 
