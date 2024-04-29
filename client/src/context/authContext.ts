@@ -1,5 +1,5 @@
-import { ICartAction } from "@/components/reducers/cartReducer";
-import { AuthState } from "@/models/classes/auth";
+import { ICartAction } from "@/reducers/cartReducer";
+import { AuthState } from "@/models/classes/authstate";
 import { CartProduct } from "@/models/classes/products";
 import { IAuthAction } from "@/reducers/authReducer";
 import { Dispatch, createContext } from "react";

@@ -1,6 +1,6 @@
 import { Dispatch, useEffect, useReducer } from "react"
 import { CartProduct } from "@/models/classes/products";
-import { CartReducer, ICartAction } from "@/components/reducers/cartReducer";
+import { CartReducer, ICartAction } from "@/reducers/cartReducer";
 
 
 

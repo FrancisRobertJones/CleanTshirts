@@ -1,4 +1,4 @@
-import { ICartAction } from "@/components/reducers/cartReducer";
+import { ICartAction } from "@/reducers/cartReducer";
 import { CartProduct } from "@/models/classes/products";
 import { Dispatch, createContext } from "react";
 

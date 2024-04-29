@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Button } from "./ui/button"
 import { CartContext } from "@/context/cartContext"
-import { CartActionType } from "./reducers/cartReducer"
+import { CartActionType } from "../reducers/cartReducer"
 import { IProduct } from "@/models/interfaces/products"
 import { toast } from "./ui/use-toast"
 import { AuthContext } from "@/context/authContext"

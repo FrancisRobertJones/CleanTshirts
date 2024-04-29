@@ -1,4 +1,4 @@
-import { AuthState } from "@/models/classes/auth";
+import { AuthState } from "@/models/classes/authstate";
 import { AuthResponse } from "../models/interfaces/auth";
 
 export interface IAuthAction {

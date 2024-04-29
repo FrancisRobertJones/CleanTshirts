@@ -1,4 +1,4 @@
-import { CartActionType } from '@/components/reducers/cartReducer';
+import { CartActionType } from '@/reducers/cartReducer';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { CartContext } from '@/context/cartContext';
