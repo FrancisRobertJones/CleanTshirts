@@ -38,9 +38,7 @@ class DatabaseConnection {
         let pipeline = []
         if (aCollection === "orders") {
             pipeline = ordersPipeline;
-        } else if (aCollection === "cart") {
-            pipeline = cartPipeline;
-        }
+        } 
         let documents = collection.aggregate(pipeline);
         let returnArray = [];
         for await (const document of documents) {

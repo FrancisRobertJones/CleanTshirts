@@ -67,8 +67,9 @@ class DatabaseObject {
         return await DatabaseConnection.getInstance().getDocument(this.collection, this.id);
     }
 
-    async loadFromDatabase() {
-        return await DatabaseConnection.getInstance().loadFromDatabase(this.collection, this.id)
+    async loadFromDatabase(id) {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>", id)
+        return await DatabaseConnection.getInstance().loadFromDatabase(this.collection, id)
     }
 }
 

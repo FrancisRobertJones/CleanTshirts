@@ -1,4 +1,5 @@
 const AuthRepository = require('../repositories/authRepository')
+const Cart = require('../classes/Cart')
 const bcrypt = require('bcrypt');
 
 
@@ -16,8 +17,8 @@ class AuthService {
         } else {
             try {
                 console.log(userData)
-                 const saltRounds = 10;
-                 const passUnhashed = userData["password"]
+                const saltRounds = 10;
+                const passUnhashed = userData["password"]
                 const passHashed = await bcrypt.hash(passUnhashed, saltRounds)
                 const userDataHashed = { ...userData, password: passHashed }
                 const newUser = await this.authRepository.createUser(userDataHashed)
@@ -30,16 +31,15 @@ class AuthService {
         }
     }
 
-/*  figure this out   async createCartForUser(userId) {
-        const cartData = {
-            userId: userId,
-            lineItems: []
-        }
-        return await this.cartRepository.createCart(cartData)
-    } */
+    async createCartForUser(userId) {
+        const newCart = new Cart()
+        newCart.setUserId(userId)
+        newCart.getSaveData()
+        newCart.save()
+    }
 
     async signIn(userData) {
-       const { email } = userData
+        const { email } = userData
         const userExistsCheck = await this.authRepository.findUser(email)
 
         if (!userExistsCheck) {
@@ -58,7 +58,7 @@ class AuthService {
                 console.log("there has been an error logging the user in", error)
                 throw new Error("Problem logging in")
             }
-        } 
+        }
     }
 
     async getUserDetails(email) {
@@ -66,9 +66,9 @@ class AuthService {
         if (!user) {
             throw new Error("User not found");
         }
-        return user; 
+        return user;
     }
-    
+
 }
 
 

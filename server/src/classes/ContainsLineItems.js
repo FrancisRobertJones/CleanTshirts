@@ -8,11 +8,6 @@
             this._lineItems = []
         }
 
-        loadFromDatabase() {
-            const lineItemsData = super.loadFromDatabase()
-            return lineItemsData
-        }
-
         getLineItems() {
             return this._lineItems
         }

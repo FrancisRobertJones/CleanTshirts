@@ -9,7 +9,6 @@ class Cart extends ContainsLineItems {
     }
 
     setUserId(userId) {
-        this.setId(userId)
         this.userId = userId
     }
 
@@ -28,7 +27,7 @@ class Cart extends ContainsLineItems {
 
     async loadCartForUser() {
         try {
-            let cart = await this.loadFromDatabase(this.collection, this.userId)
+            let cart = await this.loadFromDatabase(this.userId)
             console.log("Cart loaded for user:", this.userId);
             return cart;
         } catch (error) {
