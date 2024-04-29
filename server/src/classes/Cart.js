@@ -27,8 +27,6 @@ class Cart extends ContainsLineItems {
 
     async loadCartForUser() {
         try {
-            console.log("hello from loadcartforuser>>", this.userId)
-
             const result = await this.loadFromDatabase(this.collection, this.userId)
             if (result) {
                 this._lineItems = result.lineItems || [];

@@ -58,7 +58,6 @@ class DatabaseConnection {
         let db = this.client.db("shop");
         const collection = db.collection(aCollection)
         let activeArray = await collection.find({ "status": true }).toArray()
-        console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<", activeArray)
         return activeArray
     }
 
@@ -105,8 +104,41 @@ class DatabaseConnection {
             await this.connect()
             let db = this.client.db("shop");
             const collection = db.collection(aCollection)
-            const result = await collection.findOne({ "userId": (id) });
-            return result
+            let pipeline = []
+            if (aCollection === "cart") {
+                pipeline = [
+                    { $match: { userId: id } },
+                      {
+                        $lookup: {
+                          from: "lineItems",
+                          localField: "lineItemIds",
+                          foreignField: "_id",
+                          as: "lineItems",
+                          pipeline: [
+                            {
+                              $lookup: {
+                                from: "products",
+                                localField: "product",
+                                foreignField: "_id",
+                                as: "productDetails"
+                              }
+                            },
+                          ]
+                        }
+                      },
+                      {
+                        $addFields: {
+                          totalCartValue: {
+                            $sum: "$lineItems.totalPrice" 
+                          }
+                        }
+                      }
+                    ];
+            }
+            const documents = await collection.aggregate(pipeline).toArray();
+            console.log(documents);
+            return documents
+
         }
         catch (error) {
             console.error('failed to load:', error);

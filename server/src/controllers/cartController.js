@@ -10,12 +10,13 @@ class CartController {
             const cart = new Cart()
             cart.setUserId(userId)
 
-            await cart.loadCartForUser()
+            const cartItems = await cart.loadCartForUser()
             res.status(200).json({ cartItems });
         } catch (error) {
             res.status(500).send(error.message);
         }
     }
+
 
     addToCart = async (req, res) => {
         const { productId, quantity } = req.body
@@ -28,6 +29,10 @@ class CartController {
             res.status(500).send(error.message);
         }
     }
+
+    //remove from cart
+
+    //edit line item
 
     createOrder = async (req, res) => {
         const order = new Order()
