@@ -2,10 +2,15 @@ const ContainsLineItems = require("./ContainsLineItems")
 const Order = require("./Order")
 
 class Cart extends ContainsLineItems {
-    constructor(userId) {
+    constructor() {
         super()
-        this.userId = userId
         this.collection = "cart"
+
+    }
+
+    setUserId(userId) {
+        this.setId(userId)
+        this.userId = userId
     }
 
     async createOrder() {
@@ -20,21 +25,23 @@ class Cart extends ContainsLineItems {
         return order
     }
 
-
-    //TODO figure out how to pass id from Cart class => contains line items => databaseobject to then call method on databaseconnection
     async loadCartForUser() {
-        const result = await this.loadFromDatabase(this.collection, this.userId)
-        if (result) {
-            this._lineItems = result.lineItems || [];
-            console.log("Cart loaded:", result);
-        } else {
-            console.log("No cart found for user:", this.userId);
-        }
-        return result;
-    } catch(error) {
-        console.log("this is the error from fetching cart", error)
-    }
+        try {
+            console.log("hello from loadcartforuser>>", this.userId)
 
+            const result = await this.loadFromDatabase(this.collection, this.userId)
+            if (result) {
+                this._lineItems = result.lineItems || [];
+                console.log("Cart loaded:", result);
+            } else {
+                console.log("No cart found for user:", this.userId);
+            }
+            return result;
+        } catch (error) {
+            console.log("Error in loadCartForUser:", error)
+            throw error
+        }
+    }
 
     getSaveData() {
         let data = {}

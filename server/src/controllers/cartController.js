@@ -4,20 +4,23 @@ class CartController {
     constructor() {
     }
 
-     getCart = async (req,res) => {
+    getCart = async (req, res) => {
         try {
+            const { userId } = req.body
             const cart = new Cart()
-            const cartItems = await cart.loadFromDatabase()
+            cart.setUserId(userId)
+
+            await cart.loadCartForUser()
             res.status(200).json({ cartItems });
         } catch (error) {
             res.status(500).send(error.message);
         }
-    } 
+    }
 
     addToCart = async (req, res) => {
         const { productId, quantity } = req.body
         const cart = new Cart()
-        try {            
+        try {
             cart.createLineItem(productId, quantity)
 
             res.status(200).json({ message: "item added to cart" });

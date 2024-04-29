@@ -100,12 +100,12 @@ class DatabaseConnection {
 
     }
 
-    async loadFromDatabase(aCollection, userId) {
+    async loadFromDatabase(aCollection, id) {
         try {
             await this.connect()
             let db = this.client.db("shop");
             const collection = db.collection(aCollection)
-            const result = await collection.findOne({ "userId": (userId) });
+            const result = await collection.findOne({ "userId": (id) });
             return result
         }
         catch (error) {

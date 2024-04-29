@@ -3,17 +3,14 @@
 
 
     class ContainLineItems extends DatabaseObject {
-        constructor(userId) {
-            super(userId);
-            this.id = userId
+        constructor() {
+            super();
             this._lineItems = []
         }
 
         loadFromDatabase() {
-            let lineItemsData = super.loadFromDatabase()
-            /* for (let lineItemData in lineItemsData) {
-                this._lineItems.push(new LineItem());
-            } */
+            const lineItemsData = super.loadFromDatabase()
+            return lineItemsData
         }
 
         getLineItems() {
