@@ -51,13 +51,31 @@ const Layout = () => {
     }
   };
 
-  cartItemsState.addToCart = (product: CartProduct) =>  {
+  cartItemsState.addToCart = async (product: CartProduct) =>  {
+    //note to self cant use state check here due to async state updates. bug where unauthed user could add to cart.
+    const authRes = await checkAuth()
+    if (!authRes?.data.isAuthenticated){
+      toast({
+        variant: "destructive",
+        title: "Authentication Required",
+        description: "Please log in to add items to your cart.",
+      });
+      return;
+    } 
     const clonedCart = [...cartItemsState.cartItems]
     const itemAlreadyExistsIndex = clonedCart.findIndex((clonedItem) => clonedItem.product._id === product.product._id)
     if (itemAlreadyExistsIndex !== -1) {
         clonedCart[itemAlreadyExistsIndex].quantity += 1;
+        toast({
+          title: "Product added to cart!",
+          description: `Product ${clonedCart[itemAlreadyExistsIndex].product.name} has been added to cart`,
+        })
     } else {
         clonedCart.push(product)
+        toast({
+          title: "Product added to cart!",
+          description: `Product ${product.product.name} has been added to cart`,
+        })
     }
     setCartItems(prevState => ({
       ...prevState,
@@ -86,15 +104,13 @@ cartItemsState.clearCart = () => {
 
 
   useEffect(() => {
-/*  TODO, auth check before fetching   cartItemsState.fetchCart()
- */    checkAuth()
+  checkAuth()
+    console.log("the user is..", authedUser.loggedIn)
   }, []);
 
-  useEffect(() => {
-    console.log("<<<<<<<<<<<<")
+/*   useEffect(() => {
 
-    console.log(cartItemsState.cartItems)
-  },[cartItemsState])
+  },[cartItemsState]) */
 
 
   const logOut = async () => {
@@ -120,6 +136,7 @@ cartItemsState.clearCart = () => {
         console.log(userData, "this is the userdata")
         dispatchAuth({ type: AuthActionType.LOGIN, payload: userData })
         console.log(res.data, "this is the auth data from rendering")
+        return res
       } else {
         dispatchAuth({ type: AuthActionType.LOGOUT, payload: { isAuthenticated: false, user: null } })
       }

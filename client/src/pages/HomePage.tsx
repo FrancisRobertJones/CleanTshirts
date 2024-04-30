@@ -24,10 +24,6 @@ const HomePage = () => {
     const handleAddToCart = (product : IProduct) => {
         const newCartProduct = convertToCartProduct(product)
         addToCart(newCartProduct)
-        toast({
-            title: "Product added to cart!",
-            description: `Id number ${product._id} has been added to cart`,
-          })
     }
 
     return (

@@ -22,11 +22,10 @@ import { convertToCartProduct } from "@/utils/convertToCartProduct"
 
 
 export function Navbar() {
-
-
-
     const { cartItems, removeFromCart, clearCart } = React.useContext(CartContext)
     const [cartTotal, setCartTotal] = React.useState(0)
+    const { authedUser, logOut } = React.useContext(AuthContext)
+
 
     const handleRemoveFromCart = (product: IProduct) => {
         const cartProduct = convertToCartProduct(product)
@@ -36,6 +35,14 @@ export function Navbar() {
             description: ` ${product.name} removed from cart`,
         })
 
+    }
+
+    const handleLogout = () => {
+        toast({
+            title: "See you next time!",
+            description: "You have been logged out!",
+          })
+          logOut()
     }
 
     React.useEffect(() => {
@@ -48,7 +55,6 @@ export function Navbar() {
 
     }, [cartItems])
 
-    const { authedUser, logOut } = React.useContext(AuthContext)
 
     return (
         <>
@@ -116,7 +122,7 @@ export function Navbar() {
 
                 </NavigationMenuList>
                 <div className="ml-24">
-                    {authedUser.loggedIn ? <Button onClick={() => logOut()} className="mb-1 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Logout</Button>
+                    {authedUser.loggedIn ? <Button onClick={() => handleLogout()} className="mb-1 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Logout</Button>
                         :
                         <Link to={"/auth"}><Button className="mb-1 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Login</Button></Link>
                     }

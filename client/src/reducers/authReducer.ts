@@ -1,5 +1,6 @@
 import { AuthState } from "@/models/classes/authstate";
 import { AuthResponse } from "../models/interfaces/auth";
+import { toast } from "@/components/ui/use-toast";
 
 export interface IAuthAction {
     type: AuthActionType;
