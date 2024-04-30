@@ -54,12 +54,15 @@ const Layout = () => {
   cartItemsState.addToCart = (product: CartProduct) =>  {
     const clonedCart = [...cartItemsState.cartItems]
     const itemAlreadyExistsIndex = clonedCart.findIndex((clonedItem) => clonedItem.product._id === product.product._id)
-    if (itemAlreadyExistsIndex - 1) {
-        clonedCart[itemAlreadyExistsIndex].quantity + 1;
+    if (itemAlreadyExistsIndex !== -1) {
+        clonedCart[itemAlreadyExistsIndex].quantity += 1;
     } else {
         clonedCart.push(product)
     }
-    return clonedCart
+    setCartItems(prevState => ({
+      ...prevState,
+      cartItems: clonedCart
+    }))
 }
 
 
@@ -71,7 +74,10 @@ cartItemsState.removeFromCart = (product:CartProduct) => {
         } else if (clonedCart[selectedItemIndex].quantity === 1) {
             clonedCart.splice(selectedItemIndex, 1)
         }
-        return clonedCart
+        setCartItems(prevState => ({
+          ...prevState,
+          cartItems: clonedCart
+        }))
 }
 
 cartItemsState.clearCart = () => {
@@ -80,9 +86,15 @@ cartItemsState.clearCart = () => {
 
 
   useEffect(() => {
-    cartItemsState.fetchCart()
-    checkAuth()
+/*  TODO, auth check before fetching   cartItemsState.fetchCart()
+ */    checkAuth()
   }, []);
+
+  useEffect(() => {
+    console.log("<<<<<<<<<<<<")
+
+    console.log(cartItemsState.cartItems)
+  },[cartItemsState])
 
 
   const logOut = async () => {

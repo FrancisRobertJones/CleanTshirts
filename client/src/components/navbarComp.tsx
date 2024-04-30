@@ -16,7 +16,6 @@ import { CartContext } from "@/context/cartContext"
 import { IProduct } from "@/models/interfaces/products"
 import { toast } from "./ui/use-toast"
 import { AuthContext } from "@/context/authContext"
-import { AuthActionType } from "@/reducers/authReducer"
 import { Link } from "react-router-dom";
 import { convertToCartProduct } from "@/utils/convertToCartProduct"
 
