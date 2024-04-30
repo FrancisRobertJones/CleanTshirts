@@ -7,11 +7,11 @@ export interface IProduct {
     name: string,
     price: number,
     description: string,
-    image1: string,
-    image2: string,
+    image1?: string,
+    image2?: string,
     status?: string,
-    amountInStock: number,
-    category: string;
+    amountInStock?: number,
+    category?: string;
 }
 
 export interface ICartResponse {
@@ -32,6 +32,10 @@ export interface ICreateProductRes {
 }
 
 interface ICartItem {
-    quantity: number;
-    productDetails: IProduct[];
+    productId: string,
+    quantity: number,
+    price: string,
+    name: string,
+    description: string,
+    productDetails?: IProduct[];
 }

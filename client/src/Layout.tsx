@@ -29,19 +29,15 @@ const Layout = () => {
   cartItemsState.fetchCart = async () => {
     try {
       const response = await axios.get<ICartResponse>('http://localhost:3000/cart/', { withCredentials: true });
+      console.log(response)
       const items = response.data.cartItems.lineItems.map(item => {
         return new CartProduct(
           item.quantity,
           {
-            _id: item.productDetails[0]._id,
-            name: item.productDetails[0].name,
-            price: item.productDetails[0].price,
-            description: item.productDetails[0].description,
-            image1: item.productDetails[0].image1,
-            image2: item.productDetails[0].image2,
-            status: item.productDetails[0].status,
-            amountInStock: item.productDetails[0].amountInStock,
-            category: item.productDetails[0].category
+            _id: item.productId,
+            name: item.name,
+            price: Number(item.price),
+            description: item.description,
           }
         );
       });
@@ -85,22 +81,23 @@ const Layout = () => {
       cartItems: clonedCart
     }))
     updateServerCart()
+
   }
 
 
   cartItemsState.removeFromCart = (product: CartProduct) => {
     const clonedCart = [...cartItemsState.cartItems]
     const selectedItemIndex = clonedCart.findIndex((item) => item.product._id === product.product._id)
-    if (clonedCart[selectedItemIndex].quantity >= 2) {
-      clonedCart[selectedItemIndex] = { ...clonedCart[selectedItemIndex], quantity: clonedCart[selectedItemIndex].quantity - 1 }
-    } else if (clonedCart[selectedItemIndex].quantity === 1) {
-      clonedCart.splice(selectedItemIndex, 1)
+    const selectedItem = clonedCart[selectedItemIndex]; 
+    if (selectedItem.quantity > 1) {
+      clonedCart[selectedItemIndex] = { ...selectedItem, quantity: selectedItem.quantity - 1 };
+    } else {
+      clonedCart.splice(selectedItemIndex, 1); 
     }
     setCartItems(prevState => ({
       ...prevState,
       cartItems: clonedCart
     }))
-    updateServerCart()
   }
 
   cartItemsState.clearCart = () => {
@@ -117,16 +114,16 @@ const Layout = () => {
         });
         return;
       }
+      if(cartItemsState.cartItems.length === 0){
+        return
+      }
       try {
-
         const updatedCartItems = cartItemsState.cartItems
-        const res = await axios.post("http://localhost:3000/cart/update", updatedCartItems, { withCredentials: true })
-        
+        const res = await axios.post("http://localhost:3000/cart/update", updatedCartItems, { withCredentials: true })        
       } catch(error) {
         console.log("there has been an error updating the cart", error)
       }
     }
-
 
 
   useEffect(() => {
@@ -135,9 +132,16 @@ const Layout = () => {
       if (authRes?.data.isAuthenticated) {
         cartItemsState.fetchCart()
       }
+
     }
     authCheckAndFetchCart()
   }, []);
+
+  useEffect(() => {
+    updateServerCart()
+console.log(">>>>>>>>>>>>>>IMRUNNING>>>>>>>")
+
+  },[cartItemsState.cartItems])
 
   const logOut = async () => {
     try {

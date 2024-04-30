@@ -38,7 +38,7 @@ class DatabaseConnection {
         let pipeline = []
         if (aCollection === "orders") {
             pipeline = ordersPipeline;
-        } 
+        }
         let documents = collection.aggregate(pipeline);
         let returnArray = [];
         for await (const document of documents) {
@@ -102,35 +102,28 @@ class DatabaseConnection {
             let db = this.client.db("shop");
             const collection = db.collection(aCollection)
             let pipeline = [
-                { $match: { userId: id } }
+                { $match: { userId: id } },
             ];
             if (aCollection === "cart") {
                 pipeline.push(
+                    { $unwind: { path: "$lineItems", preserveNullAndEmptyArrays: true } },  
                     {
                         $lookup: {
-                            from: "lineItems",
-                            localField: "lineItemIds",
+                            from: "products",
+                            localField: "lineItems.productId",
                             foreignField: "_id",
-                            as: "lineItems",
-                            pipeline: [
-                                {
-                                    $lookup: {
-                                        from: "products",
-                                        localField: "product",
-                                        foreignField: "_id",
-                                        as: "productDetails"
-                                    }
-                                },
-                            ]
+                            as: "lineItems.productDetails"
                         }
                     },
+                    { $unwind: { path: "$lineItems.productDetails", preserveNullAndEmptyArrays: true } },
                     {
-                        $addFields: {
-                            totalCartValue: {
-                                $sum: "$lineItems.totalPrice"
-                            }
+                        $group: {
+                            _id: "$_id",
+                            userId: { $first: "$userId" },
+                            totalCartValue: { $first: "$totalCartValue" },
+                            lineItems: { $push: "$lineItems" }
                         }
-                    }
+                    },
                 )
             }
             const result = await collection.aggregate(pipeline).toArray();
