@@ -6,7 +6,10 @@ class CartController {
 
     getCart = async (req, res) => {
         try {
-            const { userId } = req.body
+            if (!req.session.user) {
+                return res.status(401).json({ message: "User not authenticated" });
+            }
+            const userId = req.session.user.userId;
             const cart = new Cart()
             cart.setUserId(userId)
 

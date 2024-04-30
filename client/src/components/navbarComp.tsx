@@ -43,6 +43,7 @@ export function Navbar() {
             description: "You have been logged out!",
           })
           logOut()
+          clearCart()
     }
 
     React.useEffect(() => {

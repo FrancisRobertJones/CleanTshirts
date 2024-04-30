@@ -30,7 +30,7 @@ class AuthController {
                 const userDetails = await this.authService.getUserDetails(userCredentials.email);
 
                 req.session.user = { 
-                    email: userDetails._id,
+                    userId: userDetails._id,
                     address: userDetails.address,
                     state: userDetails.state,
                     country: userDetails.country,

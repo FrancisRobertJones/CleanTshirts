@@ -23,11 +23,13 @@ import axios, { AxiosError } from 'axios'
 import { toast } from '@/components/ui/use-toast'
 import { AuthContext } from '@/context/authContext'
 import { useNavigate } from 'react-router'
+import { CartContext } from '@/context/cartContext'
 
 const Authpage = () => {
     const [newCustomer, setNewCustomer] = useState<AccountCreation>(new AccountCreation("", "", "", "", "", ""))
     const [passwords, setPasswords] = useState<PasswordCheck>(new PasswordCheck("", "", true))
     const [authCredentials, setAuthCredentials] = useState<AuthCredentials>(new AuthCredentials("", ""))
+    const { fetchCart } = useContext(CartContext)
     const { checkAuth, authedUser } = useContext(AuthContext)
     const navigate = useNavigate()
 
@@ -104,8 +106,8 @@ const Authpage = () => {
                 title: "You are logged in!",
                 description: "Enjoy your shopping!",
             })
-            console.log(res)
             setAuthCredentials(new AuthCredentials("", ""))
+            fetchCart()
             navigate("/")
 
         } catch (error) {
