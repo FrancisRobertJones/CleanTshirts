@@ -29,8 +29,6 @@ const Layout = () => {
   cartItemsState.fetchCart = async () => {
     try {
       const response = await axios.get<ICartResponse>('http://localhost:3000/cart/', { withCredentials: true });
-      console.log(">>>>>>>>>>>>>", response)
-
       const items = response.data.cartItems.lineItems.map(item => {
         return new CartProduct(
           item.quantity,
@@ -47,6 +45,9 @@ const Layout = () => {
           }
         );
       });
+            console.log("here are the items>>>>", items)
+
+      console.log("here are the items>>>>", items)
       setCartItems({ ...cartItemsState, cartItems: items })
     } catch (error) {
       console.error('Failed to load cart:', error);
@@ -83,6 +84,7 @@ const Layout = () => {
       ...prevState,
       cartItems: clonedCart
     }))
+    updateServerCart()
   }
 
 
@@ -98,11 +100,33 @@ const Layout = () => {
       ...prevState,
       cartItems: clonedCart
     }))
+    updateServerCart()
   }
 
   cartItemsState.clearCart = () => {
     setCartItems({ ...cartItemsState, cartItems: [] })
   }
+
+    const updateServerCart = async () => {
+      const authRes = await checkAuth()
+      if (!authRes?.data.isAuthenticated) {
+        toast({
+          variant: "destructive",
+          title: "Authentication Required",
+          description: "Please log in to add items to your cart.",
+        });
+        return;
+      }
+      try {
+
+        const updatedCartItems = cartItemsState.cartItems
+        const res = await axios.post("http://localhost:3000/cart/update", updatedCartItems, { withCredentials: true })
+        
+      } catch(error) {
+        console.log("there has been an error updating the cart", error)
+      }
+    }
+
 
 
   useEffect(() => {

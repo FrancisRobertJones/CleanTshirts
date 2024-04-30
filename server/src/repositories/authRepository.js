@@ -1,4 +1,4 @@
-const DatabaseConnection = require("../dataBase/draft");
+const DatabaseConnection = require("../repositories/dataBaseConnection");
 
 class AuthRepository {
     constructor() {

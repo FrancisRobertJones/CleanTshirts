@@ -26,7 +26,6 @@ class DatabaseObject {
     async save() {
         const data = this.getSaveData()
         return await DatabaseConnection.getInstance().save(this.collection, this.id, data);
-
     }
 
     getAll() {
@@ -68,7 +67,6 @@ class DatabaseObject {
     }
 
     async loadFromDatabase(id) {
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>", id)
         return await DatabaseConnection.getInstance().loadFromDatabase(this.collection, id)
     }
 }
