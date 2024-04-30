@@ -1,4 +1,3 @@
-import { ICartAction } from "@/reducers/cartReducer";
 import { AuthState } from "@/models/classes/authstate";
 import { CartProduct } from "@/models/classes/products";
 import { IAuthAction } from "@/reducers/authReducer";

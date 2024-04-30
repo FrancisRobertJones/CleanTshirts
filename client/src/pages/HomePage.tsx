@@ -1,10 +1,10 @@
-import { CartActionType } from '@/reducers/cartReducer';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { CartContext } from '@/context/cartContext';
 import { IAllProductsResponse, IProduct } from '@/models/interfaces/products';
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { convertToCartProduct } from '@/utils/convertToCartProduct';
 
 const HomePage = () => {
 
@@ -19,17 +19,16 @@ const HomePage = () => {
         fetchAllProducts()
     }, [])
 
-    const { dispatchCart } = useContext(CartContext)
+    const { addToCart } = useContext(CartContext)
 
-    const addToCart = (product: IProduct) => {
+    const handleAddToCart = (product : IProduct) => {
+        const newCartProduct = convertToCartProduct(product)
+        addToCart(newCartProduct)
         toast({
-            title: "Product added to cart",
-            description: `${product.name} added to cart`,
-        })
-        dispatchCart({ type: CartActionType.ADDTOCART, payload: product })
-      
+            title: "Product added to cart!",
+            description: `Id number ${product._id} has been added to cart`,
+          })
     }
-
 
     return (
         <div className="container mx-auto p-4">
@@ -43,7 +42,7 @@ const HomePage = () => {
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-75 flex justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out">
                             <div className='flex flex-col items-center'>
                                 <span className="text-white text-xl">{product.description}</span>
-                                <Button onClick={() => addToCart(product)} className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Add to bag</Button>
+                                <Button onClick={() => handleAddToCart(product)} className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Add to bag</Button>
                             </div>
                         </div>
                         <div className='flex'>

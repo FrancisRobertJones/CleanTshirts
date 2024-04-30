@@ -1,14 +1,19 @@
-import { ICartAction } from "@/reducers/cartReducer";
 import { CartProduct } from "@/models/classes/products";
-import { Dispatch, createContext } from "react";
+import { createContext } from "react";
 
 
-interface ICartContext {
+export interface ICartContext {
     cartItems: CartProduct[],
-    dispatchCart: Dispatch<ICartAction>
+    addToCart: (product: CartProduct) => void,
+    removeFromCart: (product: CartProduct) => void,
+    fetchCart: () => Promise<void>,
+    clearCart: () => void
 }
 
 export const CartContext = createContext<ICartContext>({
     cartItems: [],
-    dispatchCart: () => {}
+    addToCart: (product: CartProduct) => {},
+    removeFromCart: (product: CartProduct) => {},
+    fetchCart: async () => {},
+    clearCart: () => {}
 })

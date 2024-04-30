@@ -13,12 +13,12 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Button } from "./ui/button"
 import { CartContext } from "@/context/cartContext"
-import { CartActionType } from "../reducers/cartReducer"
 import { IProduct } from "@/models/interfaces/products"
 import { toast } from "./ui/use-toast"
 import { AuthContext } from "@/context/authContext"
 import { AuthActionType } from "@/reducers/authReducer"
 import { Link } from "react-router-dom";
+import { convertToCartProduct } from "@/utils/convertToCartProduct"
 
 
 
@@ -26,11 +26,12 @@ export function Navbar() {
 
 
 
-    const { cartItems, dispatchCart } = React.useContext(CartContext)
+    const { cartItems, removeFromCart, clearCart } = React.useContext(CartContext)
     const [cartTotal, setCartTotal] = React.useState(0)
 
-    const removeFromCart = (product: IProduct) => {
-        dispatchCart({ type: CartActionType.REMOVEFROMCART, payload: product })
+    const handleRemoveFromCart = (product: IProduct) => {
+        const cartProduct = convertToCartProduct(product)
+        removeFromCart(cartProduct)
         toast({
             title: "Product removed from cart",
             description: ` ${product.name} removed from cart`,
@@ -96,7 +97,7 @@ export function Navbar() {
                                     </NavigationMenuLink>
                                 </li>
                                 {cartItems.map((cartItem) => {
-                                    return (<ListItem key={cartItem.product._id} title={cartItem.product.name} showRemoveButton={true} product={cartItem.product} removeFromCart={removeFromCart}>
+                                    return (<ListItem key={cartItem.product._id} title={cartItem.product.name} showRemoveButton={true} product={cartItem.product} handleRemoveFromCart={handleRemoveFromCart}>
                                         {cartItem.product.name} {cartItem.quantity}
                                     </ListItem>)
                                 })}
@@ -104,7 +105,7 @@ export function Navbar() {
                                 {cartTotal ?
                                     <>
                                         <Button className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Checkout</Button>
-                                        <Button onClick={() => dispatchCart({ type: CartActionType.EMPTYCART })} variant="destructive" className="mt-6">Empty cart</Button>
+                                        <Button onClick={() => clearCart()} variant="destructive" className="mt-6">Empty cart</Button>
                                     </>
                                     :
                                     <h4 className="text-xs mt-6">Your cart is empty</h4>
@@ -130,8 +131,8 @@ export function Navbar() {
 
 const ListItem = React.forwardRef<
     React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a"> & { showRemoveButton?: boolean, product?: IProduct, removeFromCart?: (product: IProduct) => void }
->(({ className, title, children, showRemoveButton, removeFromCart, product, ...props }, ref) => {
+    React.ComponentPropsWithoutRef<"a"> & { showRemoveButton?: boolean, product?: IProduct, handleRemoveFromCart?: (product: IProduct) => void }
+>(({ className, title, children, showRemoveButton, handleRemoveFromCart, product, ...props }, ref) => {
 
 
     return (
@@ -150,8 +151,8 @@ const ListItem = React.forwardRef<
                     </p>
                 </a>
             </NavigationMenuLink>
-            {showRemoveButton && product && removeFromCart && (
-                <button onClick={() => removeFromCart(product)} className="text-xs h-6 bg-white text-black border border-black px-3 py-1 hover:bg-black hover:text-white">
+            {showRemoveButton && product && handleRemoveFromCart && (
+                <button onClick={() => handleRemoveFromCart(product)} className="text-xs h-6 bg-white text-black border border-black px-3 py-1 hover:bg-black hover:text-white">
                     Remove
                 </button>
             )}

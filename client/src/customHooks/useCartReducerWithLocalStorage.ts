@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useReducer } from "react"
+/* 'import { Dispatch, useEffect, useReducer } from "react"
 import { CartProduct } from "@/models/classes/products";
 import { CartReducer, ICartAction } from "@/reducers/cartReducer";
 
@@ -21,4 +21,4 @@ export const useCartReducerWithLocalStorage = (): [CartProduct[], Dispatch<ICart
     }, [cartItems])
 
     return [cartItems, dispatchCart]
-}
+}''' */

@@ -14,9 +14,24 @@ export interface IProduct {
     category: string;
 }
 
+export interface ICartResponse {
+    cartItems: {
+        _id: string;
+        userId: string;
+        lineItemIds: string[];
+        lineItems: ICartItem[];
+        totalCartValue: number;
+    }
+}
+
 export interface ICreateProductRes {
     insertResult: {
         acknowledged: boolean,
         insertedId: string
     } 
+}
+
+interface ICartItem {
+    quantity: number;
+    productDetails: IProduct[];
 }
