@@ -1,6 +1,4 @@
 const mongodb = require("mongodb");
-const { LineItemsDb } = require("../models/lineItemsDb");
-const ordersPipeline = require("../pipelines/orderPipeline")
 
 let instance = null;
 
@@ -36,9 +34,6 @@ class DatabaseConnection {
         let db = this.client.db("shop");
         const collection = db.collection(aCollection)
         let pipeline = []
-/*         if (aCollection === "orders") {
-            pipeline = ordersPipeline;
-        } */
         let documents = collection.aggregate(pipeline);
         let returnArray = [];
         for await (const document of documents) {
@@ -96,48 +91,22 @@ class DatabaseConnection {
     }
 
     async loadFromDatabase(aCollection, id) {
-        try {
-            await this.connect()
-            let db = this.client.db("shop");
-            const collection = db.collection(aCollection)
-            let pipeline = [
-                { $match: { userId: id } },
-            ];
+            try {
+                await this.connect();
+                const db = this.client.db("shop");
+                const collection = db.collection(aCollection);
+                console.log(id, "userID from loaddatabase")
 
-        
-            if (aCollection === "cart") {
-                pipeline.push(
-                    { $unwind: { path: "$lineItems", preserveNullAndEmptyArrays: true } },  
-                    {
-                        $lookup: {
-                            from: "products",
-                            localField: "lineItems.productId",
-                            foreignField: "_id",
-                            as: "lineItems.productDetails"
-                        }
-                    },
-                    { $unwind: { path: "$lineItems.productDetails", preserveNullAndEmptyArrays: true } },
-                    {
-                        $group: {
-                            _id: "$_id",
-                            userId: { $first: "$userId" },
-                            totalCartValue: { $first: "$totalCartValue" },
-                            lineItems: { $push: "$lineItems" }
-                        }
-                    },
-                )
+                const cart = await collection.findOne({ userId: id });
+                if (cart) {
+                    return cart;
+                } else {
+                    return { userId, lineItems: [] }; 
+                }
+            } catch (error) {
+                console.error('Failed to load cart:', error);
+                throw new Error('Failed to load cart');
             }
-            const result = await collection.aggregate(pipeline).toArray();
-            if (result.length > 0) {
-                return result[0]
-            } else {
-                return null
-            }
-        }
-        catch (error) {
-            console.error('failed to load:', error);
-            throw new Error('failed to load');
-        }
     }
 
 

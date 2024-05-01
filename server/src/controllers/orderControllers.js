@@ -27,7 +27,7 @@ class OrderController {
             const order = new Order()
             order.setUserId(userId)
             order.setOrderDate()
-            order.addLineItemsFromCart(cart.lineItems)
+            order.addLineItemsFromCart(cart._lineItems)
             await order.calculateTotalPrice()
             await order.saveOrder()
             return order
