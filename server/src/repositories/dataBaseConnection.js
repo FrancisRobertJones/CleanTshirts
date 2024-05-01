@@ -91,22 +91,25 @@ class DatabaseConnection {
     }
 
     async loadFromDatabase(aCollection, id) {
-            try {
-                await this.connect();
-                const db = this.client.db("shop");
-                const collection = db.collection(aCollection);
-                console.log(id, "userID from loaddatabase")
-
+        try {
+            await this.connect();
+            const db = this.client.db("shop");
+            const collection = db.collection(aCollection);
+            if (aCollection === "cart") {
                 const cart = await collection.findOne({ userId: id });
                 if (cart) {
                     return cart;
                 } else {
-                    return { userId, lineItems: [] }; 
+                    return { userId, lineItems: [] };
                 }
-            } catch (error) {
-                console.error('Failed to load cart:', error);
-                throw new Error('Failed to load cart');
+            } else if (aCollection === "orders") {
+                const data = await collection.find({ userId: id }).toArray();
+                return data
             }
+        } catch (error) {
+            console.error('Failed to load data:', error);
+            throw new Error('Failed to load data');
+        }
     }
 
 

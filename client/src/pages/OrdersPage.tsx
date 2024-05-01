@@ -50,7 +50,7 @@ const OrdersPage = () => {
                 </TableHeader>
                 <TableBody>
 
-                     {orderData && orderData.orders.map((order) => {
+                      {orderData && orderData.orders.map((order) => {
                                 return (
                                 <TableRow key={order._id}>
                                     <TableCell className="font-medium">{order.orderDate}</TableCell>
@@ -65,7 +65,7 @@ const OrdersPage = () => {
                                 </TableRow>
                             )
                         })}
-     
+      
  
 
                 </TableBody>

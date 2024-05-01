@@ -14,7 +14,7 @@ class Order extends ContainsLineItems {
             orderLineItem.setPrice(item.price);
             orderLineItem.setDescription(item.description);
             orderLineItem.setName(item.name);
-      
+
             return orderLineItem;
         });
     }
@@ -23,16 +23,16 @@ class Order extends ContainsLineItems {
         this.userId = userId
     }
 
-    setOrderDate(){
+    setOrderDate() {
         this.orderDate = new Date()
     }
 
     async saveOrder() {
         await this.save();
     }
-    
 
-    }
+
+}
 
 
 module.exports = Order

@@ -17,7 +17,8 @@ const AdminTableComponent = ( ) => {
  
     useEffect(() => {
         const fetchOrders = async () => {
-            const res = await axios.get<IOrderData>("http://localhost:3000/order/", { withCredentials: true })
+            const res = await axios.get<IOrderData>("http://localhost:3000/order/allorders", { withCredentials: true })
+            console.log(res, "this is the response from get all orders")
             setOrders(res.data)
         }
         fetchOrders()

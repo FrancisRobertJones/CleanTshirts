@@ -5,8 +5,8 @@ import HomePage from "./pages/HomePage";
 import Layout from "./Layout";
 import AdminPage from "./pages/AdminPage";
 import Authpage from "./pages/Authpage";
-import Checkout from "./pages/CheckoutPage";
 import OrdersPage from "./pages/OrdersPage";
+import Checkout from "./pages/Checkout";
 
 export const router = createBrowserRouter([
   {

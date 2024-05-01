@@ -6,12 +6,12 @@ class OrderController {
     }
 
     getOrders = async (req, res) => {
-        console.log("HELLO FROM GETORDERS")
         const userId = req.session.user.userId;
         try {
             const order = new Order()
-            order.setUserId(userId)
-            const orders = await order.getAll()
+            order.setId(userId)
+            const orders = await order.loadFromDatabase(userId)
+            console.log(orders, "HERE ARE THE ORDERS")
             res.status(200).json({ orders });
         } catch (error) {
             res.status(500).send(error.message);
@@ -32,7 +32,7 @@ class OrderController {
             await order.saveOrder()
             return order
 
-        } catch(error) {
+        } catch (error) {
             console.log(error)
         }
     }
@@ -41,6 +41,7 @@ class OrderController {
         const userId = req.session.user.userId;
         try {
             const order = new Order()
+            order.setUserId(userId)
             const orders = await order.getAll()
             res.status(200).json({ orders });
         } catch (error) {
@@ -48,4 +49,5 @@ class OrderController {
         }
     }
 }
+
 module.exports = OrderController
