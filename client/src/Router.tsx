@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import Layout from "./Layout";
 import AdminPage from "./pages/AdminPage";
 import Authpage from "./pages/Authpage";
+import Checkout from "./pages/Checkout";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
       {
         path: "/auth",
         element: <Authpage />
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />
       }
     ],
   },

@@ -41,9 +41,6 @@ const Layout = () => {
           }
         );
       });
-            console.log("here are the items>>>>", items)
-
-      console.log("here are the items>>>>", items)
       setCartItems({ ...cartItemsState, cartItems: items })
     } catch (error) {
       console.error('Failed to load cart:', error);
@@ -139,15 +136,11 @@ const Layout = () => {
 
   useEffect(() => {
     updateServerCart()
-console.log(">>>>>>>>>>>>>>IMRUNNING>>>>>>>")
-
   },[cartItemsState.cartItems])
 
   const logOut = async () => {
     try {
       const res = await axios.get("http://localhost:3000/auth/logout", { withCredentials: true })
-      console.log(res.data)
-
       dispatchAuth({ type: AuthActionType.LOGOUT, payload: { isAuthenticated: false, user: null } })
     } catch (err) {
       toast({

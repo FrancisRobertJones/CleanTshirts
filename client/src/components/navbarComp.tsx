@@ -34,16 +34,15 @@ export function Navbar() {
             title: "Product removed from cart",
             description: ` ${product.name} removed from cart`,
         })
-
     }
 
     const handleLogout = () => {
         toast({
             title: "See you next time!",
             description: "You have been logged out!",
-          })
-          logOut()
-          clearCart()
+        })
+        logOut()
+        clearCart()
     }
 
     React.useEffect(() => {
@@ -73,7 +72,7 @@ export function Navbar() {
                                         >
                                             <Icons.logo className="h-6 w-6" />
                                             <div className="mb-2 mt-4 text-lg font-medium">
-                                                {authedUser.User ? `Welcome back ${authedUser.User.email}` : 'Home'} 
+                                                {authedUser.User ? `Welcome back ${authedUser.User.userId}` : 'Home'}
                                             </div>
                                             <p className="text-sm leading-tight text-muted-foreground">
                                                 See our beautifully designed T-Shirts with environment and sustainability in mind. Good prices and scandinavian design.
@@ -81,15 +80,24 @@ export function Navbar() {
                                         </a>
                                     </NavigationMenuLink>
                                 </li>
-                                <ListItem href="/auth" title="Admin">
-                                    Log in / register
-                                </ListItem>
+                                {authedUser.User &&
+                                    <ListItem href="/auth" title="Admin">
+                                        Your orders
+                                    </ListItem>
+                                }
+                                {authedUser.User ?
+                                    <ListItem onClick={logOut} href="/auth" title="Admin">
+                                        Logout
+                                    </ListItem>
+                                    :
+                                    <ListItem href="/auth" title="Admin">
+                                        Log in / register
+                                    </ListItem>
+                                }
                                 <ListItem className="p-4 transition-colors" href="/admin" title="Admin">
                                     Admin: view, edit & add stock
                                 </ListItem>
-                                <ListItem href="/" title="Admin">
-                                    Contact us
-                                </ListItem>
+
                             </ul>
                         </NavigationMenuContent>
                     </NavigationMenuItem>
@@ -110,7 +118,7 @@ export function Navbar() {
 
                                 {cartTotal ?
                                     <>
-                                        <Button className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Checkout</Button>
+                                        <Link to={"/checkout"}><Button className="mt-6 bg-black text-white hover:bg-white hover:text-black border border-transparent hover:border-black">Checkout</Button></Link>
                                         <Button onClick={() => clearCart()} variant="destructive" className="mt-6">Empty cart</Button>
                                     </>
                                     :
@@ -129,7 +137,7 @@ export function Navbar() {
                     }
                 </div>
             </NavigationMenu >
-            
+
             <Separator />
         </>
     )
