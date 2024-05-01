@@ -5,6 +5,7 @@ class Order extends ContainsLineItems {
     constructor() {
         super()
         this.collection = "orders"
+        this.status = 'unpaid'
     }
     addLineItemsFromCart(cartLineItems) {
         this._lineItems = cartLineItems.map(item => {
@@ -14,7 +15,6 @@ class Order extends ContainsLineItems {
             orderLineItem.setPrice(item.price);
             orderLineItem.setDescription(item.description);
             orderLineItem.setName(item.name);
-
             return orderLineItem;
         });
     }
