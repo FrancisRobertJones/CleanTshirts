@@ -14,10 +14,31 @@ import { convertToCartProduct } from '@/utils/convertToCartProduct'
 import { toast } from '@/components/ui/use-toast'
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
+import { AuthContext } from '@/context/authContext'
 
 const Checkout = () => {
 
     const { cartItems, removeFromCart } = useContext(CartContext)
+    const { authedUser } = useContext(AuthContext)
+
+    const handleCheckout = async () => {
+        console.log(">>>>>>>>>>")
+        if (authedUser.loggedIn) {
+            const totalPrice = handleTotal()
+            try {
+                const res = await axios.post("http://localhost:3000/payments/create-session", {totalPrice}, { withCredentials: true })
+                const stripeCheckout = res.data.url
+                window.location = stripeCheckout
+            } catch (error) {
+                console.log("issues submitting orderdata", error)
+            }
+        } else {
+            toast({
+                title: "Please log in",
+                description: "To proceed to checkout",
+            })
+        }
+    }
 
     const handleRemoveFromCart = (product: IProduct) => {
         const cartProduct = convertToCartProduct(product)
@@ -38,6 +59,7 @@ const Checkout = () => {
         try {
             const res = await axios.post("http://localhost:3000/order/create", {}, { withCredentials: true })
             console.log("submitted order", res.data)
+            handleCheckout()
         } catch (error) {
             console.log("problem submitting order", error)
         }
@@ -85,7 +107,7 @@ const Checkout = () => {
             </Table >
             <div className='flex justify-center align-center mt-24'>
                 <h4 className='text-l mr-6'>Total price:SEK{handleTotal()}</h4>
-                <Button onClick={handleSubmitOrder}>Continue</Button>
+                <Button onClick={handleCheckout}>Continue</Button>
             </div>
         </>
 

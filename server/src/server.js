@@ -6,6 +6,8 @@ const productsRouter = require('./routes/productRoutes')
 const authRouter = require('./routes/authRoutes')
 const orderRouter = require('./routes/orderRoutes')
 const cartRoutes = require('./routes/cartRoutes')
+const paymentRoutes = require('./routes/paymentRoutes')
+
 const cors = require('cors')
 const session = require('express-session');
 require('dotenv').config();
@@ -45,6 +47,7 @@ app.use("/products", productsRouter)
 app.use("/order", orderRouter)
 app.use("/auth", authRouter)
 app.use("/cart", cartRoutes)
+app.use("/payments", paymentRoutes)
 
 
 app.listen(PORT, () => {
