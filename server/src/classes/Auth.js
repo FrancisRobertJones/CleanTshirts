@@ -34,6 +34,7 @@ class AuthService {
     async createCartForUser(userId) {
         const newCart = new Cart()
         newCart.setUserId(userId)
+        newCart.lineItems = []
         newCart.getSaveData()
         newCart.save()
     }

@@ -7,7 +7,7 @@ class Order extends ContainsLineItems {
         this.collection = "orders"
     }
     addLineItemsFromCart(cartLineItems) {
-        this.lineItems = cartLineItems.map(item => {
+        this._lineItems = cartLineItems.map(item => {
             const orderLineItem = new LineItem();
             orderLineItem.setProductId(item.productId);
             orderLineItem.setQuantity(item.quantity);

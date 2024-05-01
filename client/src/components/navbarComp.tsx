@@ -46,12 +46,8 @@ export function Navbar() {
     }
 
     React.useEffect(() => {
-        const totalCountArray: number[] = []
-        cartItems.map((item) => {
-            totalCountArray.push(item.quantity)
-        })
-        const totalNumber = totalCountArray.reduce((x, y) => x + y, 0)
-        setCartTotal(totalNumber)
+        const totalNumber = cartItems.reduce((total, item) => total + item.quantity, 0);
+        setCartTotal(totalNumber);
 
     }, [cartItems])
 
