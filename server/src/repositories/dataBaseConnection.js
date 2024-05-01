@@ -36,9 +36,9 @@ class DatabaseConnection {
         let db = this.client.db("shop");
         const collection = db.collection(aCollection)
         let pipeline = []
-        if (aCollection === "orders") {
+/*         if (aCollection === "orders") {
             pipeline = ordersPipeline;
-        }
+        } */
         let documents = collection.aggregate(pipeline);
         let returnArray = [];
         for await (const document of documents) {
@@ -103,6 +103,8 @@ class DatabaseConnection {
             let pipeline = [
                 { $match: { userId: id } },
             ];
+
+        
             if (aCollection === "cart") {
                 pipeline.push(
                     { $unwind: { path: "$lineItems", preserveNullAndEmptyArrays: true } },  

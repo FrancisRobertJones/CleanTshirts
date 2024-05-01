@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react'
 import {
     Table,
     TableBody,
@@ -7,12 +8,11 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useEffect, useState } from "react"
-import { IOrderData } from "@/models/interfaces/orders"
-import axios from "axios"
+import axios from 'axios'
+import { IOrderData, IOrders } from '@/models/interfaces/orders'
 
 
-const AdminTableComponent = ( ) => {
+const OrdersPage = () => {
     const [orderData, setOrders] = useState<IOrderData>()
  
     useEffect(() => {
@@ -31,11 +31,12 @@ const AdminTableComponent = ( ) => {
     return (
         <>
             <div className="flex flex-col items-left">
-                <h1 className="text-3xl my-12">Admin - Orders</h1>
+                <h1 className="text-3xl my-12">Confirm your order</h1>
                 <div className="mb-12"></div>
             </div>
 
-
+            {/*  TODO include images in checkout table.
+     */}
             <Table>
                 <TableCaption>Your cart</TableCaption>
                 <TableHeader>
@@ -69,9 +70,13 @@ const AdminTableComponent = ( ) => {
 
                 </TableBody>
             </Table >
+            <div className='flex justify-center align-center mt-24'>
+                <h4 className='text-l mr-6'>Total price:SEK</h4>
+
+            </div>
         </>
 
     )
 }
 
-export default AdminTableComponent
+export default OrdersPage

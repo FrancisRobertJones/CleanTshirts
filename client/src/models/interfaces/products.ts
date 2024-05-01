@@ -31,7 +31,7 @@ export interface ICreateProductRes {
     } 
 }
 
-interface ICartItem {
+export interface ICartItem {
     productId: string,
     quantity: number,
     price: string,

@@ -27,7 +27,7 @@ let orderPipeline = [
     {
       $lookup: {
         from: "users",
-        localField: "user",
+        localField: "userId",
         foreignField: "_id",
         as: "user",
       },

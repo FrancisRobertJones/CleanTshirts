@@ -81,7 +81,7 @@ export function Navbar() {
                                     </NavigationMenuLink>
                                 </li>
                                 {authedUser.User &&
-                                    <ListItem href="/auth" title="Admin">
+                                    <ListItem href="/orders" title="Admin">
                                         Your orders
                                     </ListItem>
                                 }
