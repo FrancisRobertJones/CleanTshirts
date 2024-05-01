@@ -7,6 +7,7 @@ class Cart extends ContainsLineItems {
         super()
         this.collection = "cart"
         this._id = null
+        this.lineItems = []
     }
 
     setUserId(userId) {
@@ -17,6 +18,7 @@ class Cart extends ContainsLineItems {
         try {
             let cart = await this.loadFromDatabase(this.userId)
             this.id = cart._id
+            this.lineItems = cart.lineItems
             return cart;
         } catch (error) {
             console.error("Error loading or creating cart:", error)
@@ -36,36 +38,17 @@ class Cart extends ContainsLineItems {
                 lineItem.setName(item.product.name)
                 return lineItem
             })
-            console.log(this._lineItems)
             await this.save()
         } catch (error) {
             console.log(error, "error updating cart items")
         }
     }
 
-
-
-    async createOrder() {
-        let order = new Order
-
-        for (let i = 0; i < this._lineItems.length; i++) {
-            let lineItem = this._lineItems[i];
-            await order.createLineItem(lineItem.productId, lineItem.quantity)
-        }
-        await order.calculateTotalPrice()
-        await order.save()
-        return order
-    }
-
-
-
     getSaveData() {
         let data = {
             userId: this.userId,
             lineItems: this._lineItems.map(lineItem => lineItem.getSaveData()),
         };
-
-        console.log("Data to be saved for cart:", data);
         return data;
     }
 

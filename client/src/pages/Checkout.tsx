@@ -36,7 +36,7 @@ const Checkout = () => {
 
     const handleSubmitOrder = async () => {
         try {
-            const res = await axios.post("http://localhost:3000/order/create", { withCredentials: true })
+            const res = await axios.post("http://localhost:3000/order/create", {}, { withCredentials: true })
             console.log("submitted order", res.data)
         } catch (error) {
             console.log("problem submitting order", error)
@@ -84,7 +84,7 @@ const Checkout = () => {
                 </TableBody>
             </Table >
             <div className='flex justify-center align-center mt-24'>
-                <h4 className='text-l mr-6'>Total price:${handleTotal()}</h4>
+                <h4 className='text-l mr-6'>Total price:SEK{handleTotal()}</h4>
                 <Button onClick={handleSubmitOrder}>Continue</Button>
             </div>
         </>

@@ -44,7 +44,6 @@ class DatabaseConnection {
         for await (const document of documents) {
             returnArray.push(document)
         }
-        console.log(returnArray)
         return returnArray
     }
 
@@ -145,8 +144,6 @@ class DatabaseConnection {
             await this.connect()
             let db = this.client.db("shop");
             const collection = db.collection(aCollection)
-            console.log(aId)
-
             const result = await collection.deleteOne({ "_id": new mongodb.ObjectId(aId) });
             return result
         }

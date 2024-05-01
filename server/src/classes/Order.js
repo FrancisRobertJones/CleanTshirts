@@ -1,45 +1,38 @@
 const ContainsLineItems = require("./ContainsLineItems")
+const LineItem = require("./LineItem")
 
 class Order extends ContainsLineItems {
     constructor() {
         super()
         this.collection = "orders"
     }
+    addLineItemsFromCart(cartLineItems) {
+        this.lineItems = cartLineItems.map(item => {
+            const orderLineItem = new LineItem();
+            orderLineItem.setProductId(item.productId);
+            orderLineItem.setQuantity(item.quantity);
+            orderLineItem.setPrice(item.price);
+            orderLineItem.setDescription(item.description);
+            orderLineItem.setName(item.name);
+      
+            return orderLineItem;
+        });
+    }
 
-    getSaveData() {
-        let data = {}
-        if(this._orderDate) {
-            data["orderDate"]= this._orderDate
-        }
-        if(this._customer) {
-            data["customer"]= this._customer
-        }
-        if(this._status) {
-            data["status"]= this._status
-        }
-        if(this._totalPrice) {
-            data["totalPrice"] = this._totalPrice
-        }
+    setUserId(userId) {
+        this.userId = userId
+    }
+
+    setOrderDate(){
+        this.orderDate = new Date()
+    }
+
+    async saveOrder() {
+        await this.save();
     }
     
 
     }
-
-
-    /*     _id
-    662126e8b0e613b243b8119f
-    orderDate
-    2014-04-17T00:00:00.000+00:00
-    customer
-    "francis@example.com"
-    totalPrice
-    500
-    paymentId
-    null
-    status
-    "unpaid"
-    
-     */
 
 
 module.exports = Order

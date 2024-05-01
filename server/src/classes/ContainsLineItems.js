@@ -1,48 +1,26 @@
-    const LineItem = require("./LineItem")
-    const DatabaseObject = require("./DatabaseObject")
+const LineItem = require("./LineItem")
+const DatabaseObject = require("./DatabaseObject")
 
 
-    class ContainLineItems extends DatabaseObject {
-        constructor() {
-            super();
-            this._lineItems = []
-        }
-
-        getLineItems() {
-            return this._lineItems
-        }
-
-        addLineItem(aLineItem) {
-            this._lineItems.push(aLineItem)
-        }
-
-        async createLineItem(productId, quantity) {
-            await this.ensureHasId()
-
-            let lineItem = new LineItem()
-
-            lineItem.setOrder(this.id)
-            lineItem.setProduct(productId)
-            lineItem.setQuantity(quantity)
-
-            await lineItem.calculateTotalPrice()
-
-            await lineItem.save()
-
-            this.addLineItem(lineItem)
-        }
-
-        async calculateTotalPrice() {
-            let total = this._lineItems.reduce((total, lineItem, index) => {
-                return total + lineItem.totalPrice
-            }, 0)
-
-            this.totalPrice = total
-        }
-
-        removeLineItem() {
-            //TODO
-        }
+class ContainLineItems extends DatabaseObject {
+    constructor() {
+        super();
+        this.lineItems = []
     }
 
-    module.exports = ContainLineItems;
+    getSaveData() {
+        return {
+            userId: this.userId,
+            lineItems: this.lineItems.map(item => item.getSaveData()),
+            totalPrice: this.totalPrice,
+            orderDate: this.orderDate
+        };
+    }
+
+    async calculateTotalPrice() {
+        this.totalPrice = this.lineItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+
+}
+
+module.exports = ContainLineItems;

@@ -42,7 +42,7 @@ app.use(express.json())
 app.use(cors(corsOptions));
 
 app.use("/products", productsRouter)
-app.use("/orders", orderRouter)
+app.use("/order", orderRouter)
 app.use("/auth", authRouter)
 app.use("/cart", cartRoutes)
 

@@ -7,7 +7,7 @@ class LineItem extends DatabaseObject {
     constructor() {
         super()
         this.collection = "lineItems"
-        this._quantity = 0;
+        this.quantity = 0;
         this.name = null;
         this.price = null;
         this.description = null
@@ -39,6 +39,7 @@ class LineItem extends DatabaseObject {
     }
 
     getSaveData() {
+        console.log("im getting save data")
         let data = {
             productId: this.productId,
             quantity: this.quantity,
@@ -46,19 +47,9 @@ class LineItem extends DatabaseObject {
             name: this.name,
             description: this.description
         }
-        console.log(data, "here the data <>>>>")
         return data
     }
 
-    /*     async calculateTotalPrice() {
-            let product = new Product()
-            product.setId(this.productId)
-            await product.setupFromDatabase() // TODO fix later 
-    
-            const productPrice = product.getPrice() // TODO fix this function
-            this.totalPrice = this.quantity * productPrice
-        }
-*/
 }
 
 
