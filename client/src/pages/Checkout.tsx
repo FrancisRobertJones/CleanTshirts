@@ -38,6 +38,8 @@ const Checkout = () => {
             try {
                 const res = await axios.post("http://localhost:3000/payments/create-session", { totalPrice }, { withCredentials: true })
                 const sessionId = res.data.sessionId
+                localStorage.setItem('sessionId', sessionId);
+
                 handleSubmitOrder(sessionId)
                 const stripeCheckout = res.data.url
                 window.location = stripeCheckout

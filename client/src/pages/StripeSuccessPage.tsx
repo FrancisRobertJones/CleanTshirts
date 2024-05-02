@@ -6,19 +6,26 @@ import { useContext, useEffect, useState } from "react"
 
 const StripeSuccessPage = () => {
 
-  const { authedUser } = useContext(AuthContext)
+  const { authedUser, checkAuth } = useContext(AuthContext)
+
+  useEffect(() => {
+    checkAuth()
+
+  },[])
 
 
   useEffect(() => {
-    const sessionIdFromClient = authedUser.User?.sessionId
-    if (sessionIdFromClient) {
+    const sessionId = localStorage.getItem('sessionId')
+    console.log("HERE IS THE SESSION ID FROM LOCAL STORAGE", sessionId)
+    if (sessionId) {
       const sendStripeConfirmation = async () => {
-        const res = await axios.post("http://localhost:3000/payments/verify", { sessionIdFromClient }, { withCredentials: true })
+        const res = await axios.post("http://localhost:3000/payments/verify", { sessionId }, { withCredentials: true })
         console.log(res, "HERE IS STRIPE res")
+        localStorage.removeItem('sessionId')
       }
       sendStripeConfirmation()
     }
-  }, [authedUser])
+  }, [authedUser.User?.sessionId])
 
 
   return (

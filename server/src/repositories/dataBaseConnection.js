@@ -133,7 +133,7 @@ class DatabaseConnection {
         await this.connect()
         let db = this.client.db("shop");
         const collection = db.collection(aCollection)
-        const result = await collection.updateOne({idData}, { $set: updates})
+        const result = await collection.updateOne({...idData}, { $set: updates})
         return result
     }
 

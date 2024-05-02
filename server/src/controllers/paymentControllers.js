@@ -41,11 +41,11 @@ class PaymentController {
 
     verifyPayment = async (req, res) => {
         const stripe = initStripe();
-        const { sessionIdFromClient } = req.body
-        const session = await stripe.checkout.sessions.retrieve(sessionIdFromClient)
+        const { sessionId } = req.body
+        const session = await stripe.checkout.sessions.retrieve(sessionId)
         console.log(session, "here is the session")
         if (session.payment_status === "paid") {
-            let idData = {sessionId: sessionIdFromClient}
+            let idData = {sessionId: sessionId}
             let data = {status: "paid"}
             await this.order.updateOne(idData, data)
             console.log("order status updated.")
