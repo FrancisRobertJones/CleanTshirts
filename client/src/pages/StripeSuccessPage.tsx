@@ -10,10 +10,10 @@ const StripeSuccessPage = () => {
 
 
   useEffect(() => {
-    const sessionId = authedUser.User?.sessionId
-    if (sessionId) {
+    const sessionIdFromClient = authedUser.User?.sessionId
+    if (sessionIdFromClient) {
       const sendStripeConfirmation = async () => {
-        const res = await axios.post("http://localhost:3000/payments/verify", { sessionId }, { withCredentials: true })
+        const res = await axios.post("http://localhost:3000/payments/verify", { sessionIdFromClient }, { withCredentials: true })
         console.log(res, "HERE IS STRIPE res")
       }
       sendStripeConfirmation()

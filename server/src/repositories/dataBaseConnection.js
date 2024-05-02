@@ -128,6 +128,15 @@ class DatabaseConnection {
     }
 
 
+    async updateOne(aCollection, idData, updates){
+        console.log("IM UPDATING AFTER CONFIRMATION", aCollection, idData, updates)
+        await this.connect()
+        let db = this.client.db("shop");
+        const collection = db.collection(aCollection)
+        const result = await collection.updateOne({idData}, { $set: updates})
+        return result
+    }
+
 }
 
 module.exports = DatabaseConnection

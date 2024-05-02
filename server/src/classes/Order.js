@@ -35,6 +35,9 @@ class Order extends ContainsLineItems {
         await this.save();
     }
 
+    async updateOne(idData, data){
+        await this.updateOneFromDB(idData, data)
+    }
 
 }
 

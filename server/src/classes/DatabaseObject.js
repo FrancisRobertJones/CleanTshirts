@@ -69,6 +69,14 @@ class DatabaseObject {
     async loadFromDatabase(id) {
         return await DatabaseConnection.getInstance().loadFromDatabase(this.collection, id)
     }
+
+    async updateBySessionID( sessionId, data){
+        return await DatabaseConnection.getInstance().loadFromDatabase(this.collection, sessionId, data)
+    }
+
+    async updateOneFromDB(idData, data){
+        return await DatabaseConnection.getInstance().updateOne(this.collection, idData, data)
+    }
 }
 
 module.exports = DatabaseObject;

@@ -1,11 +1,13 @@
 const initStripe = require("../utils/stripeinit")
 const AuthService = require("../repositories/authRepository")
 const AuthRepository = require("../repositories/authRepository")
+const Order = require("../classes/Order")
 
 class PaymentController {
     constructor() {
         this.authService = new AuthService()
         this.authRepository = new AuthRepository()
+        this.order = new Order()
     }
 
     createSession = async (req, res) => {
@@ -39,13 +41,15 @@ class PaymentController {
 
     verifyPayment = async (req, res) => {
         const stripe = initStripe();
-        const { sessionId } = req.body
-        const session = await stripe.checkout.sessions.retrieve(sessionId)
+        const { sessionIdFromClient } = req.body
+        const session = await stripe.checkout.sessions.retrieve(sessionIdFromClient)
         console.log(session, "here is the session")
         if (session.payment_status === "paid") {
-            
+            let idData = {sessionId: sessionIdFromClient}
+            let data = {status: "paid"}
+            await this.order.updateOne(idData, data)
+            console.log("order status updated.")
         }
-         
     }
 }
 
