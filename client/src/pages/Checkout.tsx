@@ -21,12 +21,23 @@ const Checkout = () => {
     const { cartItems, removeFromCart } = useContext(CartContext)
     const { authedUser } = useContext(AuthContext)
 
+    const handleSubmitOrder = async () => {
+        try {
+            const res = await axios.post("http://localhost:3000/order/create", {}, { withCredentials: true })
+            console.log("submitted order", res.data)
+            handleCheckout()
+        } catch (error) {
+            console.log("problem submitting order", error)
+        }
+    }
+
+
     const handleCheckout = async () => {
-        console.log(">>>>>>>>>>")
         if (authedUser.loggedIn) {
+            handleSubmitOrder()
             const totalPrice = handleTotal()
             try {
-                const res = await axios.post("http://localhost:3000/payments/create-session", {totalPrice}, { withCredentials: true })
+                const res = await axios.post("http://localhost:3000/payments/create-session", { totalPrice }, { withCredentials: true })
                 const stripeCheckout = res.data.url
                 window.location = stripeCheckout
             } catch (error) {
@@ -55,15 +66,7 @@ const Checkout = () => {
         }, 0)
     }
 
-    const handleSubmitOrder = async () => {
-        try {
-            const res = await axios.post("http://localhost:3000/order/create", {}, { withCredentials: true })
-            console.log("submitted order", res.data)
-            handleCheckout()
-        } catch (error) {
-            console.log("problem submitting order", error)
-        }
-    }
+
 
     return (
         <>

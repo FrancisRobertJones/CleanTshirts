@@ -1,18 +1,19 @@
 const initStripe = require("../utils/stripeinit")
+const AuthService = require("../repositories/authRepository")
 
 class PaymentController {
     constructor() {
+        this.authService = new AuthService()
     }
-
 
     createSession = async (req, res) => {
         const stripe = initStripe()
-        const totalPrice  = req.body
+        const { totalPrice } = req.body
+        console.log("total price is>>>", totalPrice)
+        const stripeUnit = Math.round(Number(totalPrice) * 100)
         const userId = req.session.user.userId;
-
-
-        console.log("here is the total price!", totalPrice, "here is the user", userId)
-
+        const user = await this.authService.findUser(userId)
+        const stripeId = user["stripeId"].id
         const session = await stripe.checkout.sessions.create({
             mode: "payment",
             line_items: [{
@@ -21,17 +22,27 @@ class PaymentController {
                     product_data: {
                         name: 'Total Cart Charge',
                     },
-                    unit_amount: Math.round(totalPrice * 100)
+                    unit_amount: stripeUnit
                 },
                 quantity: 1
             }],
-            //TODO FIX CUSTOMER, REASIGN ORDER CREATION INTO CHECKOUT ALONGSIDE STRIPE
-            customer: userId,
+            customer: stripeId,
             success_url: "http://localhost:5173/success",
             cancel_url: "http://localhost.5173",
         })
 
-        response.status(200).json({ url: session.url, sessionID: session.id })
+        res.status(200).json({ url: session.url, sessionID: session.id })
+    }
+
+    verifyPayment = async (req, res) => {
+        const stripe = initStripe();
+        const { stripeId } = req.body
+        console.log(stripeId, "here is the sessionid")
+
+        const session = await stripe.checkout.sessions.retrieve(stripeId)
+        console.log(session, "here is the session")
+        /*         session.payment_status === "paid" ? 
+         */
     }
 }
 

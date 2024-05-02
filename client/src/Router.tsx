@@ -7,6 +7,7 @@ import AdminPage from "./pages/AdminPage";
 import Authpage from "./pages/Authpage";
 import OrdersPage from "./pages/OrdersPage";
 import Checkout from "./pages/Checkout";
+import StripeSuccessPage from "./pages/StripeSuccessPage";
 
 export const router = createBrowserRouter([
   {
@@ -29,12 +30,15 @@ export const router = createBrowserRouter([
       {
         path: "/checkout",
         element: <Checkout />
-      }
-      ,
+      },
       {
         path: "/orders",
         element: <OrdersPage />
-      }
-    ],
+      },
+       {
+        path: "/success",
+        element: <StripeSuccessPage />
+      } 
+    ]
   },
 ]);

@@ -32,7 +32,8 @@ class AuthRepository {
             "address": userDataHashed["address"],
             "state": userDataHashed["state"],
             "country": userDataHashed["country"],
-            "postcode": userDataHashed["postcode"]
+            "postcode": userDataHashed["postcode"],
+            "stripeId": userDataHashed["stripeId"]
         })
     }
 

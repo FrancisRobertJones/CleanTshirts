@@ -28,14 +28,16 @@ class AuthController {
             const authSuccess = await this.authService.signIn(userCredentials)
             if (authSuccess) { 
                 const userDetails = await this.authService.getUserDetails(userCredentials.email);
-
+                const stripeId = userDetails.stripeId.id
                 req.session.user = { 
                     userId: userDetails._id,
                     address: userDetails.address,
                     state: userDetails.state,
                     country: userDetails.country,
-                    postcode: userDetails.postcode
+                    postcode: userDetails.postcode,
+                    stripeId: stripeId
                  }
+                 console.log(req.session.user)
                 res.status(200).json({ success: "user has been authed" }) 
             } 
             else { 

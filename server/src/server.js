@@ -48,6 +48,7 @@ app.use("/order", orderRouter)
 app.use("/auth", authRouter)
 app.use("/cart", cartRoutes)
 app.use("/payments", paymentRoutes)
+app.use("/verify", paymentRoutes)
 
 
 app.listen(PORT, () => {

@@ -30,7 +30,6 @@ class Cart extends ContainsLineItems {
         try {
             this._lineItems = newCartItems.map((item) => {
                 const lineItem = new LineItem()
-
                 lineItem.setProductId(item.product._id)
                 lineItem.setQuantity(item.quantity)
                 lineItem.setPrice(item.product.price)
