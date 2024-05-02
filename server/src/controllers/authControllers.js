@@ -35,7 +35,8 @@ class AuthController {
                     state: userDetails.state,
                     country: userDetails.country,
                     postcode: userDetails.postcode,
-                    stripeId: stripeId
+                    stripeId: stripeId,
+                    sessionId: userDetails.sessionId
                  }
                  console.log(req.session.user)
                 res.status(200).json({ success: "user has been authed" }) 

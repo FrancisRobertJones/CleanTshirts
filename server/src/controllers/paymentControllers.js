@@ -1,15 +1,16 @@
 const initStripe = require("../utils/stripeinit")
 const AuthService = require("../repositories/authRepository")
+const AuthRepository = require("../repositories/authRepository")
 
 class PaymentController {
     constructor() {
         this.authService = new AuthService()
+        this.authRepository = new AuthRepository()
     }
 
     createSession = async (req, res) => {
         const stripe = initStripe()
         const { totalPrice } = req.body
-        console.log("total price is>>>", totalPrice)
         const stripeUnit = Math.round(Number(totalPrice) * 100)
         const userId = req.session.user.userId;
         const user = await this.authService.findUser(userId)
@@ -30,19 +31,21 @@ class PaymentController {
             success_url: "http://localhost:5173/success",
             cancel_url: "http://localhost.5173",
         })
-
-        res.status(200).json({ url: session.url, sessionID: session.id })
+        user.sessionID = session.id
+        const updates = { sessionId: user.sessionID }
+        await this.authRepository.updateUser(userId, updates)
+        res.status(200).json({ url: session.url, sessionId: session.id })
     }
 
     verifyPayment = async (req, res) => {
         const stripe = initStripe();
-        const { stripeId } = req.body
-        console.log(stripeId, "here is the sessionid")
-
-        const session = await stripe.checkout.sessions.retrieve(stripeId)
+        const { sessionId } = req.body
+        const session = await stripe.checkout.sessions.retrieve(sessionId)
         console.log(session, "here is the session")
-        /*         session.payment_status === "paid" ? 
-         */
+        if (session.payment_status === "paid") {
+            
+        }
+         
     }
 }
 

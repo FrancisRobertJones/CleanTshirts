@@ -23,6 +23,10 @@ class Order extends ContainsLineItems {
         this.userId = userId
     }
 
+    setSessionId(sessionId){
+        this.sessionId = sessionId
+    }
+
     setOrderDate() {
         this.orderDate = new Date()
     }

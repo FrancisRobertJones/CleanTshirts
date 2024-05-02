@@ -23,7 +23,6 @@ class AuthRepository {
     }
 
     async createUser(userDataHashed) {
-
         await this.connect()
         const collection = this.db.collection('users')
         return await collection.insertOne({
@@ -35,6 +34,12 @@ class AuthRepository {
             "postcode": userDataHashed["postcode"],
             "stripeId": userDataHashed["stripeId"]
         })
+    }
+
+    async updateUser(userId, updates){
+        await this.connect()
+        const collection = this.db.collection('users')
+        return await collection.updateOne({_id: userId}, { $set: updates})
     }
 
     async getLogin(userData) {

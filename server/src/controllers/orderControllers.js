@@ -20,6 +20,7 @@ class OrderController {
 
     createOrder = async (req, res) => {
         const userId = req.session.user.userId
+        const { sessionId } = req.body
         const cart = new Cart()
         cart.setUserId(userId)
         try {
@@ -28,6 +29,7 @@ class OrderController {
             order.setUserId(userId)
             order.setOrderDate()
             order.addLineItemsFromCart(cart._lineItems)
+            order.setSessionId(sessionId)
             await order.calculateTotalPrice()
             await order.saveOrder()
             return order

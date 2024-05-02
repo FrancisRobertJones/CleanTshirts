@@ -5,7 +5,8 @@ export class User {
         public state: string,
         public country: string,
         public postcode: string,
-        public stripeId: string
+        public stripeId: string,
+        public sessionId: string
     ){}
 }
 

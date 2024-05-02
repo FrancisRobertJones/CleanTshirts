@@ -14,7 +14,8 @@ class ContainLineItems extends DatabaseObject {
             lineItems: this._lineItems.map(item => item.getSaveData()),
             totalPrice: this.totalPrice,
             orderDate: this.orderDate,
-            status: this.status
+            status: this.status,
+            sessionId: this.sessionId
         };
     }
 

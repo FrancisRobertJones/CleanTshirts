@@ -21,9 +21,9 @@ const Checkout = () => {
     const { cartItems, removeFromCart } = useContext(CartContext)
     const { authedUser } = useContext(AuthContext)
 
-    const handleSubmitOrder = async () => {
+    const handleSubmitOrder = async (sessionId: string) => {
         try {
-            const res = await axios.post("http://localhost:3000/order/create", {}, { withCredentials: true })
+            const res = await axios.post("http://localhost:3000/order/create", { sessionId }, { withCredentials: true })
             console.log("submitted order", res.data)
             handleCheckout()
         } catch (error) {
@@ -34,10 +34,11 @@ const Checkout = () => {
 
     const handleCheckout = async () => {
         if (authedUser.loggedIn) {
-            handleSubmitOrder()
             const totalPrice = handleTotal()
             try {
                 const res = await axios.post("http://localhost:3000/payments/create-session", { totalPrice }, { withCredentials: true })
+                const sessionId = res.data.sessionId
+                handleSubmitOrder(sessionId)
                 const stripeCheckout = res.data.url
                 window.location = stripeCheckout
             } catch (error) {

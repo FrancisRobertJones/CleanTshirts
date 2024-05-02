@@ -84,7 +84,6 @@ class AuthService {
         }
         return user;
     }
-
 }
 
 
